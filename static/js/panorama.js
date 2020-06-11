@@ -1,0 +1,3 @@
+function myPanorama(_container){
+    
+}
