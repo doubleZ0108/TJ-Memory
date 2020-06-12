@@ -1,3 +1,7 @@
-function myPanorama(_container){
+function myPanorama(){
     
+}
+
+function getAllSpirites(){
+    return tp.def.sprites;
 }

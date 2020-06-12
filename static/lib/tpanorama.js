@@ -15,6 +15,8 @@
     var _sprites = [];
     var _lables = [];
     var _count1 = 1;
+    var _move_step = 0.05;		    // 手机版：竖屏移动步长为0.05;横屏为0.1
+    var _dbltouch_interval = 500;   // 手机版：双击的判定间隔
 
     var options = {
         container: 'panoramaConianer',//容器
@@ -49,11 +51,18 @@
             initLable(this.def.lables, this.def.sprite);
 
             /* ============= myPanorama =============== */
-            _container.addEventListener('dblclick', mydblClickHandler, false);
+            
             /* ======================================== */
             _container.addEventListener('mousedown', onDocumentMouseDown, false);
             _container.addEventListener('mousemove', onDocumentMouseMove, false);
             _container.addEventListener('mouseup', onDocumentMouseUp, false);
+            _container.addEventListener('touchstart', onDocumentTouchStart, false);
+            _container.addEventListener('touchmove', onDocumentTouchMove, false);
+            _container.addEventListener('touchend', onDocumentTouchEnd, false);
+
+            _container.addEventListener('dblclick', mydblClickHandler, false);
+            _container.addEventListener('touchstart', mydblTouchHandler, false);
+
             _container.addEventListener('mousewheel', (e) => {
                 onDocumentMouseWheel(e, this.def.minFocalLength, this.def.maxFocalLength);
             }, false);
@@ -67,7 +76,7 @@
     }
 
     /* ============= myPanorama =============== */
-    function mydblClickHandler(event){
+    function dblEventCallback(event){
         event.preventDefault();
 
         /* 视角转换逻辑 但是效果并不好 */
@@ -96,6 +105,9 @@
     /* ======================================== */
 
     function extend(o, n, override) {
+        /* ====== 动态扩充需要传递的数据 ======= */
+        n["sprites"] = _sprites;
+
         for (var key in n) {
             if (n.hasOwnProperty(key) && (!o.hasOwnProperty(key) || override)) {
                 o[key] = n[key];
@@ -163,6 +175,34 @@
         _isUserInteracting = false;
     }
 
+    function onDocumentTouchStart(event) {
+        _isUserInteracting = true;
+
+        var touch = event.touches[0]; //获取第一个触点
+        var x = Number(touch.pageX); //页面触点X坐标
+        var y = Number(touch.pageY); //页面触点Y坐标
+
+        _onPointerDownPointerX = x;
+        _onPointerDownPointerY = y;
+        _onPointerDownLon = _lon;
+        _onPointerDownLat = _lat;
+    }
+
+    function onDocumentTouchMove(event) {
+        var touch = event.touches[0]; //获取第一个触点
+        var x = Number(touch.pageX); //页面触点X坐标
+        var y = Number(touch.pageY); //页面触点Y坐标
+
+        if (_isUserInteracting) {
+            _lon = (_onPointerDownPointerX - x) * _move_step + _onPointerDownLon;
+            _lat = (y - _onPointerDownPointerY) * _move_step + _onPointerDownLat;
+        }
+    }
+
+    function onDocumentTouchEnd(event) {
+        _isUserInteracting = false;
+    }
+
     function onDocumentMouseClick(event) {
         _mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         _mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -171,26 +211,43 @@
         intersects.forEach(this.def.onClick);
     }
 
+    var click_counter = 0;
+    function mydblTouchHandler(event) {
+        click_counter++;
+        setTimeout(function () {
+            click_counter = 0;
+        },_dbltouch_interval);
+        if (click_counter > 1) {
+            console.log("simulate double touch on iPhone...");
+            dblEventCallback(event);
+            click_counter = 0;
+        }
+    }
+
+    function mydblClickHandler(event){
+       dblEventCallback(event);
+    }
+
     function onDocumentMouseWheel(ev, minFocalLength, maxFocalLength) {
-        // var ev = ev || window.event;
-        // var down = true;
-        // var m = _camera.getFocalLength();
-        // down = ev.wheelDelta ? ev.wheelDelta < 0 : ev.detail > 0;
-        // if (down) {
-        //     if (m > minFocalLength) {
-        //         m -= m * 0.05
-        //         _camera.setFocalLength(m);
-        //     }
-        // } else {
-        //     if (m < maxFocalLength) {
-        //         m += m * 0.05
-        //         _camera.setFocalLength(m);
-        //     }
-        // }
-        // if (ev.preventDefault) {
-        //     ev.preventDefault();
-        // }
-        // return false;
+        var ev = ev || window.event;
+        var down = true;
+        var m = _camera.getFocalLength();
+        down = ev.wheelDelta ? ev.wheelDelta < 0 : ev.detail > 0;
+        if (down) {
+            if (m > minFocalLength) {
+                m -= m * 0.05
+                _camera.setFocalLength(m);
+            }
+        } else {
+            if (m < maxFocalLength) {
+                m += m * 0.05
+                _camera.setFocalLength(m);
+            }
+        }
+        if (ev.preventDefault) {
+            ev.preventDefault();
+        }
+        return false;
     }
 
     function onWindowResize() {
