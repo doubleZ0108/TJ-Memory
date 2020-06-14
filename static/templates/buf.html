@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style type="text/css">
+        #alert_box {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 400px;
+            height: 200px;
+            display: none;
+        }
+
+        #alert_box dl {
+            position: absolute;
+            left: -200px;
+            top: -100px;
+            width: 400px;
+            height: 200px;
+            border: solid 1px #999;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #alert_box dt {
+            background-color: #ccc;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        #alert_box dd {
+            padding: 6px;
+            margin: 0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        window.alert = function (title, info) {
+            var box = document.getElementById("alert_box");
+            var html = '<dl><dt>' + title + '</dt><dd>' + info + '</dd><\/dl>';
+            if (box) {
+                box.innerHTML = html;
+                box.style.display = "block";
+            } else {
+                var div = document.createElement("div");
+                div.id = "alert_box";
+                div.style.display = "block";
+                document.body.appendChild(div);
+                div.innerHTML = html;
+            }
+        }
+
+        alert("重写alert()方法", "这仅是一个设计思路，还可以进一步设计");
+    </script>
+</body>

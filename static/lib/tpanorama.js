@@ -17,6 +17,8 @@
     var _count1 = 1;
     var _move_step = 0.05;		    // 手机版：竖屏移动步长为0.05;横屏为0.1
     var _dbltouch_interval = 500;   // 手机版：双击的判定间隔
+    var _which_form = "label";
+    var _opt;
 
     var options = {
         container: 'panoramaConianer',//容器
@@ -34,6 +36,7 @@
 
     function tpanorama(opt) {
         this.render(opt);
+        _opt = opt;
     }
 
     tpanorama.prototype = {
@@ -51,7 +54,13 @@
             initLable(this.def.lables, this.def.sprite);
 
             /* ============= myPanorama =============== */
-            
+            _container.addEventListener('dblclick', mydblClickHandler, false);
+            _container.addEventListener('touchstart', mydblTouchHandler, false);
+            _container.addEventListener('mousedown', onRightClickHandler, false);
+            document.oncontextmenu = function(e){
+                e.preventDefault();
+                return false;
+            }
             /* ======================================== */
             _container.addEventListener('mousedown', onDocumentMouseDown, false);
             _container.addEventListener('mousemove', onDocumentMouseMove, false);
@@ -59,9 +68,6 @@
             _container.addEventListener('touchstart', onDocumentTouchStart, false);
             _container.addEventListener('touchmove', onDocumentTouchMove, false);
             _container.addEventListener('touchend', onDocumentTouchEnd, false);
-
-            _container.addEventListener('dblclick', mydblClickHandler, false);
-            _container.addEventListener('touchstart', mydblTouchHandler, false);
 
             _container.addEventListener('mousewheel', (e) => {
                 onDocumentMouseWheel(e, this.def.minFocalLength, this.def.maxFocalLength);
@@ -71,6 +77,7 @@
             }, false);
             _container.addEventListener('click', onDocumentMouseClick.bind(this), false);
             global.addEventListener('resize', onWindowResize, false);
+
             animate();
         }
     }
@@ -91,16 +98,55 @@
         var factor = 0.7;
         var myLon = _lon + (Math.abs(_mouse.x)>0.45 ? _fov*factor : _fov) * _mouse.x;
         var myLat = _lat + _fov/2 * _mouse.y;
-        var myLable = {
-            position: {
-                lon: myLon,
-                lat: myLat,
-            },
-            logoUrl: '../img/logo.png',
-            text: _lon + ' ' + _lat,
-        };
-        _sprites.push(createSprite(myLable.position, myLable.logoUrl, myLable.text));
+
+        var myLabelText = prompt("请输入文字: ");
+        if(myLabelText){
+            var myLable = {
+                position: {
+                    lon: myLon,
+                    lat: myLat,
+                },
+                // logoUrl: '../img/logo.png',
+                logoUrl: '',
+                text: myLabelText,
+            };
+            // _sprites.push(createSprite(myLable.position, myLable.logoUrl, myLable.text));
+            _lables.push(createLableSprite(_sceneOrtho, myLable.text, myLable.position));
+        } else {
+            console.log("no");
+        }
+
         render();
+    }
+
+
+    function onRightClickHandler(e){
+        if(e.button === 2){
+            _sceneOrtho.children = [];
+
+            if(_which_form === "label"){
+                _which_form = "spirit";
+                _sprites = [];
+                Array.from(_lables).forEach(function(lable){
+                    if(!lable.logoUrl){
+                        lable.logoUrl = '../img/logo.png';  // 默认logo
+                    }
+                    _sprites.push(createSprite(lable.pos, lable.logoUrl, lable.name));
+                });
+
+                _lables = [];
+            } else if(_which_form === "spirit"){
+                _which_form = "label";
+                _lables = [];
+                Array.from(_sprites).forEach(function(spirit){
+                    console.log(spirit);
+                    _lables.push(createLableSprite(_sceneOrtho, spirit.name, spirit.pos));
+                });
+                _sprites = [];
+            }
+
+            render();
+        }
     }
     /* ======================================== */
 
@@ -279,12 +325,13 @@
         var context1 = canvas1.getContext('2d');
         var metrics = context1.measureText(name);
         var width = metrics.width * 1.5;
-        context1.font = "10px 宋体";
+        context1.font = "15px 宋体";
         context1.fillStyle = "rgba(0,0,0,0.95)";
         context1.fillRect(0, 0, width + 8, 20 + 8);
         context1.fillStyle = "rgba(0,0,0,0.2)";
         context1.fillRect(2, 2, width + 4, 20 + 4);
-        context1.fillStyle = "rgba(255,255,255,0.95)";
+        // context1.fillStyle = "rgba(255,255,255,0.95)";
+        context1.fillStyle = "rgba(255,255,255,1)";
         context1.fillText(name, 4, 20);
         var texture1 = new THREE.Texture(canvas1);
         texture1.needsUpdate = true;

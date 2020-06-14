@@ -18,7 +18,7 @@
                 url: '../img/p1.png',
                 lables: [
                     { position: { lon: -72.00, lat: 9.00 }, logoUrl: '../img/logo.png', text: '蓝窗户' },
-                    { position: { lon: 114.12, lat: 69.48 }, logoUrl: '../img/logo.png', text: '一片云彩' },
+                    { position: { lon: 114.12, lat: 69.48 }, logoUrl: '../img/logo.png', text: '一片云彩很长很长很长' },
                     { position: { lon: 132.48, lat: -12.24 }, logoUrl: '../img/logo.png', text: '大海' }
                 ],
                 widthSegments: 60,      //水平切段数
@@ -29,7 +29,6 @@
                 sprite: 'label',         // label,icon
                 onClick: (e) => { 
                     console.log(e.object.name);
-                    myPanorama();
                 }
             }
             tp = new tpanorama(opt);
