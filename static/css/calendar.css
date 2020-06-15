@@ -1,0 +1,367 @@
+.CalendarGroup {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* 禁止文字被选中 */
+    -moz-user-select:none;      /*火狐*/
+    -webkit-user-select:none;   /*webkit浏览器*/
+    -ms-user-select:none;       /*IE10*/
+    -khtml-user-select:none;    /*早期浏览器*/
+    user-select:none;
+}
+
+.awesome-calendar {
+    --button-width: 165px;
+    --button-height: 165px;
+
+    display: grid;
+    grid-template-areas: 
+    "header"
+    "weeks"
+    "days";
+    grid-template-rows:repeat(3, auto);
+    align-items: center;
+    text-align: center;
+
+    /* background-color: rgba(0, 0, 0, 0.2); */
+    background: linear-gradient(104deg, #72EDF2, #5151E5, #5151E5, #72EDF2);
+    background-size: 200%;
+    background-position: 100% 0;
+
+    padding: 24px;
+    border-radius:50px;
+    font-size: 20px;
+}
+
+/* ========= header =========== */
+.header {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    align-items: center;
+}
+.header h1 {
+    font-size: 30px;
+    color: white;
+}
+.header h1:hover {
+    cursor: pointer;
+}
+
+
+.header .nev {
+    --nev-width: 50px;
+    --nev-height: 50px;
+    width: var(--nev-width);
+    height: var(--nev-height);
+    line-height: var(--nev-height);
+    border-radius: calc(var(--nev-height) / 2);
+
+    display: inline-block;
+
+    background-color: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+    transition: 0.8s cubic-bezier(0.2,0.8,0.2,1);
+}
+.header .nev:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 1);
+    animation: rubberBandAnimation 1s;
+}
+.header .left-part {
+    justify-self: flex-start;
+}
+.header .right-part {
+    justify-self: flex-end;
+}
+
+/* ========= weeks =========== */
+.weeks {
+    --week-padding: 20px;
+    display: grid;
+    /* grid-template-areas: "Monday Tuesday Wednesday Thursday Friday Saturday Sunday"; */
+    grid-template-columns: repeat(7, auto);
+    align-items: center;
+    margin: 20px 0 30px 0;
+    
+    background-color: #34495e;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.weeks .bg {
+    position: absolute;
+    height: 100%;
+    width: calc(var(--button-width) + var(--week-padding));
+    z-index: 1;
+    border-radius: 5px;
+    background-color: #1abc9c;
+    transition: .3s;
+}
+
+.week {
+    padding: var(--week-padding);
+    z-index: 2;
+    color: #fff;
+    transition: .3s;
+}
+.week:hover {
+    font-weight: bold;
+    transform: scale(1.3);
+}
+
+/* ========= days =========== */
+.days {
+    display: grid;
+    grid-template-areas: 
+    "day-1   day-2   day-3   day-4   day-5   day-6   day-7"
+    "day-8   day-9   day-10  day-11  day-12  day-13  day-14"
+    "day-15  day-16  day-17  day-18  day-19  day-20  day-21"
+    "day-22  day-23  day-24  day-25  day-26  day-27  day-28"
+    "day-29  day-30  day-31  day-32  day-33  day-34  day-35"
+    "day-36  day-37  day-38  day-39  day-40  day-41  day-42";
+
+    grid-template-rows: repeat(6, var(--button-height));
+    grid-template-columns: repeat(7, var(--button-width));
+    grid-column-gap: 20px;
+    grid-row-gap: 40px;
+    align-items: center;
+    justify-items: center;
+}
+
+.day-group {
+    --rotate-deg: 100deg;
+    position: relative;
+    height: var(--button-height);
+    width: var(--button-width);
+    line-height: var(--button-height);
+    transform: translateZ(0);
+    transition: 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.day-group:hover {
+    cursor: pointer;
+}
+
+/******** outside ************/
+.day-group .day-outside .day-shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    height: 105%;
+    background: rgba(0, 0, 0, 0.05);
+    transition: 0.7s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform-origin: center top;
+}
+.day-group:hover .day-outside .day-shadow {
+    transform: rotateX(86deg);
+    transition: 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.day-group .day-outside .day-paper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    transform-origin: center top;
+    transform-style: preserve-3d;
+
+    perspective: 1000px;
+}
+.day-group .day-outside .day-paper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    transform-origin: center top;
+    transform: translateY(-100%);
+    width: calc(var(--button-height) * 0.8);
+    height: calc(var(--button-height) * 0.1);
+
+    margin: 0 auto;
+    background: rgba(239, 239, 239, 0.8);
+    transition: 0.65s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.day-group .day-outside .day-paper .day-paper-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    
+    background: linear-gradient(135deg,#5EFCE8,#736EFE);
+    background-size: cover;
+    background-position: center;
+
+    transform-origin: center top;
+    transform-style: preserve-3d;
+    z-index: 2;
+    transition: 0.65s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.day-group:hover .day-outside .day-paper .day-paper-bg {
+    transform: rotateX(var(--rotate-deg)) translate3d(0, 0, 0);
+}
+.day-group .day-outside .day-paper .day-paper-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform-origin: center top;
+    transform: rotateZ(0);
+    width: calc(var(--button-height) * 0.8);
+    height: calc(var(--button-height) * 0.1);
+    margin: 0 auto;
+    background: rgba(239, 239, 239, 0.8);
+    z-index: 20;
+    /* backface-visibility: hidden; */
+}
+
+.day-group .day-outside .cover-content-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    perspective: 1000;
+    width: 100%;
+    height: 100%;
+    color: white;
+}
+
+.day-group .day-outside .cover-content {
+    transform-origin: center top;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: all 0.65s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.day-group:hover .day-outside .cover-content {
+    transform: rotateX(var(--rotate-deg)) translate3d(0, 0, 0);
+    backface-visibility: hidden;
+}
+
+
+/******** inside ************/
+.day-group .day-inside {
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.day-group .day-inside div {
+    display: block;
+    min-height: 48px;
+    line-height: 48px;
+    font-size: 22px;
+    width: 100%;
+    color: white;
+    
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* ========= Adaotive =========== */
+/* Adapt for iPhone */
+@media screen and (max-width:600px) {
+    .awesome-calendar {
+        padding: 15px;
+    }
+
+    .awesome-calendar {
+        --button-width: 40px;
+        --button-height: 40px;
+    }
+
+    .days {
+        grid-column-gap: 10px;
+        grid-row-gap: 20px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .header .nev {
+        --nev-width: 30px;
+        --nev-height: 30px;
+    }
+
+    .day-group .day-outside .cover-content h1 {
+        font-size: 15px;
+    }
+
+    .day-group .day-inside div {
+        min-height: 20px;
+        line-height: 12px;
+        font-size: 5px;
+    }
+
+    .weeks {
+        --week-padding: 10px;
+        margin: 20px 0 30px 0;
+    }
+    
+    .week {
+        font-size: 10px;
+    }
+    .week:hover {
+        transform: scale(1.1);
+    }
+}
+
+/* Adapt for iPad */
+@media screen and (min-width:600px) and (max-width:1200px) {
+    .awesome-calendar {
+        --button-width: 120px;
+        --button-height: 120px;
+    }
+
+    .day-group .day-inside div {
+        font-size: 15px;
+    }
+}
+
+
+@keyframes rubberBandAnimation {
+    0% {
+        transform: scale3d(1, 1, 1);
+    }
+    35% {
+        transform: scale3d(1.25, .75, 1);
+    }
+    45% {
+        transform: scale3d(.75, 1, 1);
+    }
+    60% {
+        transform: scale3d(1.2, .8, 1);
+    }
+    75% {
+        transform: scale3d(1.05, .95, 1);
+    }
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}

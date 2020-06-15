@@ -1,0 +1,80 @@
+
+.WaveSectionGroup {
+    height: 640px;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+
+    display: grid;
+    grid-template-rows: 0.618rf 1rf;
+    grid-gap: 20px;
+    transition: 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.WaveSectionGroup .WaveTop {
+    position: absolute;
+    width: 100%;
+    top: -6px;
+    transform: rotate(180deg);
+}
+
+.WaveSectionGroup .WaveBottom {
+    position: absolute;
+    width: 100%;
+    bottom: -6px;
+}
+
+.WaveSectionGroup .WaveSectionLogo {
+    align-self: flex-end;
+    width: 150px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    outline: none;
+    transition: 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.WaveSectionGroup .WaveSectionTitleGroup {
+    align-self: flex-start;
+    margin: 0 50px;
+    /* width: 100%; */
+
+    font-family: '宋体',sans-serif;
+    font-size: 30px;
+    font-style: italic;
+
+    display: grid;
+    grid-template-columns: repeat(3,auto);
+    align-items: center;
+}
+
+.WaveSectionTitleGroup .Decoration {
+    color: rgba(255,255,255,0.6);
+}
+.WaveSectionTitleGroup .left {
+    align-self: flex-end;
+    margin: auto 1px auto auto;
+}
+
+.WaveSectionTitleGroup .WaveSectionText {
+    color: white;
+    letter-spacing: 10px;
+    text-align: center;
+    transition: 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (max-width: 640px) {
+    .WaveSectionGroup {
+        height: 400px;
+    }
+    .WaveSectionGroup .WaveSectionLogo {
+        width: 100px;
+    }
+    .WaveSectionTitleGroup .Decoration {
+        font-size: 20px;
+    }
+    .WaveSectionTitleGroup .WaveSectionText {
+        font-size: 20px;
+        letter-spacing: 5px;
+    }
+}

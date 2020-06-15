@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="../js/calendar.js"></script>
+    <script src="../js/awesome-calendar.js"></script>
+    <link rel="stylesheet" href="../css/calendar.css">
+</head>
+<body>
+    <div class="awesome-calendar">
+        <div class="header" style="grid-area: header;">
+            <div class="left-part">
+                <div id="year-left" class="nev">&lt;&lt;</div>
+                <div id="month-left" class="nev">&lt;</div>
+            </div>
+            <h1 id="current-year-month">November<br />2017</h1>
+            <div class="right-part">
+                <div id="month-right" class="nev">&gt;</div>
+                <div id="year-right" class="nev">&gt;&gt;</div>
+            </div>
+        </div>
+        <div id="weeks" class="weeks" style="grid-area: weeks;">
+            <!-- <div class="week" style="grid-area: Monday;">Monday</div> -->
+        </div>
+        <div id="days" class="days" style="grid-area: days;">
+            <!-- <div class="day-group">
+                <div class="day-outside">
+                    <div class="day-shadow"></div>
+                    <div class="day-paper" style="grid-area: day-1; transform: rotate(1.3deg);">
+                        <div class="day-paper-bg" id="day-bgcolor-1">
+                        </div>
+                    </div>
+                    <div class="cover-content-container">
+                        <div class="cover-content">
+                            <h1 id="day-text-1">1</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="day-inside">
+                    <div>Text</div>
+                    <button>Button</button>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</body>
+
+<script>
+    initAwesomeStructure();
+    initLogic(true);
+</script>
+</html>

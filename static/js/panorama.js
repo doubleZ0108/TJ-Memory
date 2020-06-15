@@ -1,5 +1,5 @@
 function myPanorama(){
-    
+    tp.render(opt);
 }
 
 function getAllSpirites(){
