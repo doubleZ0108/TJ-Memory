@@ -1,0 +1,58 @@
+.FooterGroup {
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.FooterGroup .Text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: rgba(0, 0, 0, 0.5);
+
+    font-weight: 600;
+    text-align: center;
+    
+    /* width: 100%; */
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    transition: .8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.FooterGroup:hover .Text {
+    /*虽然渐变色没法transition，但可以通过transition进行背景颜色移动*/
+    background: linear-gradient(104deg, #72EDF2, #5151E5, #5151E5, #72EDF2);
+    /* background: linear-gradient(104deg, #fce4ec, #03a9f4, #03a9f4, #fce4ec); */
+    background-size: 200%;
+    background-position: 100% 0;
+
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 1);
+    transform: translateY(-10px);
+
+    animation: 1s linearTransition ease-in-out;
+}
+
+
+@media (max-width: 640px) {
+    .FooterGroup .Text {
+        font-size: 8px;
+    }
+    .FooterGroup:hover p {
+        /* width: 80%; */
+    }
+}
+
+.FooterGroup a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.5);
+    transition: .8s cubic-bezier(0.2,0.8,0.2,1);
+}
+.FooterGroup:hover a{
+    color: rgba(255, 255, 255, 0.8);
+}

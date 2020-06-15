@@ -1,0 +1,32 @@
+.SectionCaptionGroup {
+    margin: 0 auto 40px;
+}
+.SectionCaptionGroup h2 {
+    font-size: 60px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.SectionCaptionGroup h2 label {
+    background: linear-gradient(104deg, #5151E5 0%, #72EDF2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.SectionCaptionGroup h3 {
+    margin: 0 auto;
+    font-size: 15px;
+    letter-spacing: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.5);
+}
+
+@media (max-width: 640px) {
+    .SectionCaptionGroup {
+        margin: 0 auto 20px;
+    }
+    .SectionCaptionGroup h2 {
+        font-size: 40px;
+    }
+}
