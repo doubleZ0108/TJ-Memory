@@ -47,6 +47,11 @@
     font-size: 30px;
     color: white;
 }
+.header h1:hover {
+    cursor: pointer;
+}
+
+
 .header .nev {
     --nev-width: 50px;
     --nev-height: 50px;
@@ -310,10 +315,9 @@
 
     .day-group .day-inside div {
         min-height: 20px;
-        line-height: 20px;
-        font-size: 10px;
+        line-height: 12px;
+        font-size: 5px;
     }
-
 
     .weeks {
         --week-padding: 10px;

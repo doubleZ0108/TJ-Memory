@@ -6,6 +6,8 @@ window.onload = function(){
 
     initAwesomeStructure();
     initLogic(true);
+
+    initWaveSection();
 };
 
 

@@ -41,8 +41,7 @@ function initAwesomeStructure() {
             '        </div>\n' +
             '    </div>\n' +
             '    <div class="day-inside">\n' +
-            '        <div>Text1</div>\n' +
-            '        <div>Text2</div>\n' +
+            '        <div id="day-description-' + i + '">用全景记录生活</div>\n' +
             '    </div>\n' +
             '</div>'
         ].join("");

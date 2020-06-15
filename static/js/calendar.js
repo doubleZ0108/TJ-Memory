@@ -49,6 +49,7 @@ function initLogic(isAwesome=false){
             let obj = await readJson("testcalendar.json");  //获取这一月的信息
 
             for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {  //判断变色的日期
+
                 // for basic calendar
                 var DayText = $("day" + j);
                 var DayBgColor = DayText;
@@ -61,6 +62,7 @@ function initLogic(isAwesome=false){
 
                 let existItem = isExist(obj, changeYear, changeMonth+1, j);
                 if(existItem != false){
+                    $("day-description-" + j).innerHTML = existItem.description;
                     setStyle(DayBgColor, {
                         background: "url(" + existItem.imgUrl + ")",
                     });
@@ -148,14 +150,22 @@ function initLogic(isAwesome=false){
     days.onclick = function(e) {
         var clickDay = null;
 
-        if(isAwesome) {
+        try{
             clickDay = e.target.firstElementChild.firstElementChild.innerHTML;
-        } else {
+        }
+        catch(error){
             clickDay = e.target.innerHTML;
         }
-        
+
         changeDay = clickDay;
         printDays(changeYear, changeMonth);
+    }
+
+    $('current-year-month').onclick = function(){
+        printDays(thisYear, thisMonth);
+        changeYear = thisYear;
+        changeMonth = thisMonth;
+        changeDay = today;
     }
 
     Array.from(document.querySelectorAll(".cover-content-container")).forEach((card)=>{
