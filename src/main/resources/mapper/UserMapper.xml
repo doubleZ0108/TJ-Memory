@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.doublez.tjmemory.dao.UserDao">
+
+    <!-- find user -->
+    <select id="find_by_id" parameterType="int" resultType="site.doublez.tjmemory.entity.User">
+        SELECT ID,USERNAME,PASSWORD FROM User WHERE ID=#{0};
+    </select>
+
+</mapper>
