@@ -8,6 +8,11 @@ var changeYear = thisYear;
 var changeMonth = thisMonth;
 var changeDay = dayNum;
 
+var clickDay = null;
+
+var isExistArray = [];
+let sdf;
+
 function initLogic(isAwesome=false){
     var now = $('current-year-month');
     var month_left = $('month-left');
@@ -36,6 +41,9 @@ function initLogic(isAwesome=false){
      */
     function printDays(year, month) {
         refresh();
+
+        isExistArray = [];
+
         var nowMonthStartDay = new Date(year, month - 1, 1).getDay();   //当前月第一天是周几
         if(nowMonthStartDay == 0) {
             nowMonthStartDay = 7;
@@ -62,6 +70,7 @@ function initLogic(isAwesome=false){
 
                 let existItem = isExist(obj, changeYear, changeMonth+1, j);
                 if(existItem != false){
+                    isExistArray.push(j.toString());
                     $("day-description-" + j).innerHTML = existItem.description;
                     setStyle(DayBgColor, {
                         background: "url(" + existItem.imgUrl + ")",
@@ -147,8 +156,10 @@ function initLogic(isAwesome=false){
         printDays(changeYear, changeMonth);
     }
 
+
+    var click_counter = 0;
     days.onclick = function(e) {
-        var clickDay = null;
+        clickDay = null;
 
         try{
             clickDay = e.target.firstElementChild.firstElementChild.innerHTML;
@@ -158,6 +169,16 @@ function initLogic(isAwesome=false){
         }
 
         changeDay = clickDay;
+
+        click_counter++;
+        setTimeout(function () {
+            click_counter = 0;
+        }, 500);
+        if (click_counter > 1) {
+            dblEventCallback(event);
+            click_counter = 0;
+        }
+
         printDays(changeYear, changeMonth);
     }
 
@@ -168,14 +189,14 @@ function initLogic(isAwesome=false){
         changeDay = today;
     }
 
-    Array.from(document.querySelectorAll(".cover-content-container")).forEach((card)=>{
-        card.addEventListener("dblclick",(e)=>{
-            let now = {
-                year: changeYear,
-                month: changeMonth+1,
-                day: e.target.firstElementChild.firstElementChild.innerHTML
-            };
-
+    async function dblEventCallback(){
+        let now = {
+            year: changeYear,
+            month: changeMonth+1,
+            day: clickDay
+        };
+        if(isExistArray.indexOf(now.day) === -1){
+            /* input file callback */
             var evt = new MouseEvent("click", {
                 bubbles: false,
                 cancelable: false,
@@ -188,25 +209,70 @@ function initLogic(isAwesome=false){
                 let imageType = /^image\//;
 
                 if(this.files.length){
-                  let file = this.files[0];
-                  let reader = new FileReader();
+                let file = this.files[0];
+                let reader = new FileReader();
 
-                  if (!imageType.test(file.type)) {
+                if (!imageType.test(file.type)) {
                     alert("请选择图片, 该类型的文件不受支持!");
                     return;
                     }
 
-                  //新建 FileReader 对象
-                  reader.onload = function(){
+                //新建 FileReader 对象
+                reader.onload = function(){
                     console.log(this.result);
                     $("day-bgcolor-" + 10).style.background = "url(" + this.result + ")";
-                  };
-                  // 设置以什么方式读取文件，这里以base64方式
-                  reader.readAsDataURL(file);
-                 }
-              }
-        });
-    });
+                };
+                // 设置以什么方式读取文件，这里以base64方式
+                reader.readAsDataURL(file);
+                }
+            };
+        }
+    }
+
+    // Array.from(document.querySelectorAll(".cover-content-container")).forEach((card)=>{
+    //     card.addEventListener("dblclick",(e)=>{
+
+    //         let now = {
+    //             year: changeYear,
+    //             month: changeMonth+1,
+    //             day: clickDay
+    //         };
+    //         if(isExistArray.indexOf(now.day) === -1){
+    //             /* input file callback */
+    //             var evt = new MouseEvent("click", {
+    //                 bubbles: false,
+    //                 cancelable: false,
+    //                 view: window
+    //             });
+                
+    //             let myinput = $('myinput');
+    //             myinput.dispatchEvent(evt);
+    //             myinput.onchange = function (){
+    //                 let imageType = /^image\//;
+
+    //                 if(this.files.length){
+    //                 let file = this.files[0];
+    //                 let reader = new FileReader();
+
+    //                 if (!imageType.test(file.type)) {
+    //                     alert("请选择图片, 该类型的文件不受支持!");
+    //                     return;
+    //                     }
+
+    //                 //新建 FileReader 对象
+    //                 reader.onload = function(){
+    //                     console.log(this.result);
+    //                     $("day-bgcolor-" + 10).style.background = "url(" + this.result + ")";
+    //                 };
+    //                 // 设置以什么方式读取文件，这里以base64方式
+    //                 reader.readAsDataURL(file);
+    //                 }
+    //             };
+    //         }
+
+            
+    //     });
+    // });
 }
 
 

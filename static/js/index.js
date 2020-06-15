@@ -8,6 +8,8 @@ window.onload = function(){
     initLogic(true);
 
     initWaveSection();
+
+    initHistory();
 };
 
 
