@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import site.doublez.tjmemory.service.UserService;
 
 import javax.annotation.Resource;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,8 @@ public class IndexController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String root(){
+    public String root() throws IOException, InterruptedException {
+        connect_to_python();
         return "index";
     }
 
@@ -29,28 +31,21 @@ public class IndexController {
         return "index";
     }
 
-    @PostMapping("/find-by-id")
-    @ResponseBody
-    public Map<String, Object> SignUp(@RequestBody Map<String,Object> map){
-        String username = map.get("username").toString();
-        System.out.println(username);
-        System.out.println(userService.find_by_id(1));
-
-        Map<String, Object> result_map = new HashMap<>();
-//
-//        try{
-//            if(!userService.is_user_exist(username)){
-//                userService.insert_user(user);
-//                result_map.put("state", "true");
-//            } else {
-//                result_map.put("state", "false");
-//                result_map.put("msg", "该用户已存在，请更换用户名注册 | 直接登陆");
-//            }
-//        } catch (Exception e){
-//            result_map.put("state", "false");
-//            result_map.put("msg", "数据库错误");
-//        }
-
-        return result_map;
+    public void connect_to_python() {
+        Process proc;
+        try {
+            proc = Runtime.getRuntime().exec("python src/main/resources/static/python/panorama.py");
+            //用输入输出流来截取结果
+            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            String line = null;
+            while ((line = in.readLine()) != null) {
+                System.out.println(line);
+            }
+            in.close();
+            proc.waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+//        System.out.println("Java finish calling python...");
     }
 }
