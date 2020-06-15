@@ -1,0 +1,168 @@
+/* 滚动后仍然fix在固定位置 */
+.Navigation {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    padding: 50px 0;
+    z-index: 9999;
+    transition: 0.8s cubic-bezier(0.2,0.8,0.2,1);
+}
+
+.NavigationGroup {
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, auto);   /* 排列 头像-列表-button*/
+  grid-gap: 50px;
+  text-align: center;
+  align-items: center;
+  justify-items: center;
+}
+
+.NavigationGroup img {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  transition: 1s cubic-bezier(0.2,0.8,0.2,1);
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+.NavigationGroup img:hover {
+  /* transform: translateY(-3px); */
+  animation: rubberBandAnimation 1s;
+  animation-delay: 0.1s;
+}
+
+.NavigationGroup ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-gap: 25px;
+  align-items: center;
+  text-align: left;
+}
+
+.NavigationGroup ul a {
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: 700;
+  color: white;
+  padding: 5px 10px;
+  transition: 1s cubic-bezier(0.2,0.8,0.2,1);
+  border-radius: 10px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  -webkit-transition: 1s cubic-bezier(0.2,0.8,0.2,1);
+}
+.NavigationGroup ul a:hover {
+  background-color: white;
+  color: black;
+  border: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+
+}
+.NavigationGroup ul li {
+  transition: 1s cubic-bezier(0.2,0.8,0.2,1);
+}
+.NavigationGroup ul li:hover {
+  transform: translateY(-3px);
+}
+
+.NavigationGroup button {
+  margin: 5px;
+  /* padding: 50px; */
+  height: 60%;
+  width: 120%;
+  font-size: 20px;
+  background-image: linear-gradient(102.24deg, #fff 0%, #fff 100%);
+  border: none;
+  font-weight: 700;
+  border-radius: 20px;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  transition: 1s cubic-bezier(0.2,0.8,0.2,1);
+}
+.NavigationGroup button:hover {
+  background-image: linear-gradient(104deg, #72EDF2, #5151E5, #5151E5, #72EDF2);
+  background-size: 200%;
+  background-position: 100% 0;
+
+  color: white;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+  /* transform: translateY(-3px); */
+  animation: rubberBandAnimation 1s;
+  animation-delay: 0.1s;
+}
+
+.NavigationGroup button a {
+  text-decoration: none;
+  color: black;
+}
+.NavigationGroup button:hover a {
+  color: white;
+}
+
+@keyframes rubberBandAnimation {
+  0% {
+      transform: scale3d(1, 1, 1);
+  }
+  35% {
+      transform: scale3d(1.25, .75, 1);
+  }
+  45% {
+      transform: scale3d(.75, 1, 1);
+  }
+  60% {
+      transform: scale3d(1.2, .8, 1);
+  }
+  75% {
+      transform: scale3d(1.05, .95, 1);
+  }
+  100% {
+      transform: scale3d(1, 1, 1);
+  }
+}
+
+/* scroll effect */
+.NavigationScrolled {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px 0;
+  backdrop-filter: blur(20px);    /* 半透明 */
+}
+
+/* Adaptive Layout */
+/* when screen is less than 640px */
+@media (max-width: 600px) {
+  .Navigation {
+    padding: 15px 0;
+  }
+  .NavigationGroup {
+    margin: auto 5px;
+    grid-gap: 15px;
+  }
+  .NavigationGroup ul {
+    grid-template-columns: repeat(2, auto);
+    grid-gap: 10px;
+  }
+  .NavigationGroup ul a {
+    font-size: 15px;
+  }
+  .NavigationGroup button {
+    padding: 5px 10px;
+    font-size: 15px;
+    margin: auto 10px auto auto;
+    width: 100%;
+  }
+  /* .NavigationGroup ul li:nth-child(4) {
+      display: none;
+  } */
+}

@@ -19,7 +19,19 @@ public class UserService {
     @Resource
     private UserDao userDao;
 
+    public void insert_user(User user){
+        userDao.insert_user(user);
+    }
+
     public User find_by_id(int id){
         return userDao.find_by_id(id);
+    }
+
+    public boolean is_user_exist(String username){
+        return userDao.is_user_exist(username);
+    }
+
+    public boolean check_username_password(User user){
+        return userDao.check_username_password(user);
     }
 }

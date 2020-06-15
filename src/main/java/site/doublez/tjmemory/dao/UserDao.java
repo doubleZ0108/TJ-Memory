@@ -11,5 +11,11 @@ import site.doublez.tjmemory.entity.User;
  **/
 @Mapper
 public interface UserDao {
+    void insert_user(User user);
+
     User find_by_id(int id);
+
+    boolean is_user_exist(String username);
+
+    boolean check_username_password(User user);
 }

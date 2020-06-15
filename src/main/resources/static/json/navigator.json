@@ -1,0 +1,24 @@
+{
+    "navigator": [
+        {
+            "href": "index.html#",
+            "content": "同济商城",
+            "title": "TJ-Mall"
+        },
+        {
+            "href": "index.html#creative-product-anchor",
+            "content": "同济创意",
+            "title": "Tongji Creative"
+        },
+        {
+            "href": "index.html#gift-anchor",
+            "content": "同济礼物",
+            "title": "Tongji Gift"
+        },
+        {
+            "href": "index.html#book-anchor",
+            "content": "同济出版",
+            "title": "Tongji Publication"
+        }
+    ]
+}

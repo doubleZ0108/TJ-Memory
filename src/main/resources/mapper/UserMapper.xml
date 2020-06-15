@@ -3,9 +3,25 @@
 
 <mapper namespace="site.doublez.tjmemory.dao.UserDao">
 
+    <!-- insert user -->
+    <insert id = "insert_user" parameterType="site.doublez.tjmemory.entity.User">
+        INSERT INTO
+            User(ID,USERNAME,PASSWORD)
+        VALUES
+            (#{id},#{username},#{password});
+    </insert>
+
     <!-- find user -->
     <select id="find_by_id" parameterType="int" resultType="site.doublez.tjmemory.entity.User">
         SELECT ID,USERNAME,PASSWORD FROM User WHERE ID=#{0};
+    </select>
+
+    <select id="is_user_exist" parameterType="String" resultType="boolean">
+        SELECT count(id) FROM User WHERE USERNAME=#{username};
+    </select>
+
+    <select id="check_username_password" parameterType="site.doublez.tjmemory.entity.User" resultType="boolean">
+        SELECT count(id) FROM User WHERE (USERNAME=#{username} AND PASSWORD=#{password});
     </select>
 
 </mapper>

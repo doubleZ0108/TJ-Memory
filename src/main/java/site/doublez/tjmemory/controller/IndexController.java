@@ -34,7 +34,7 @@ public class IndexController {
     public Map<String, Object> SignUp(@RequestBody Map<String,Object> map){
         String username = map.get("username").toString();
         System.out.println(username);
-        System.out.println(userService.find_by_id(2));
+        System.out.println(userService.find_by_id(1));
 
         Map<String, Object> result_map = new HashMap<>();
 //

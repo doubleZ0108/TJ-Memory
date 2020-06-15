@@ -1,0 +1,100 @@
+/* ============== History ================= */
+.HistoryGroup {
+    width: 80%;
+    height: 70vh;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.HistoryGroup .HistoryList {
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    transition: .8s cubic-bezier(0.2,0.8,0.2,1);
+}
+
+.HistoryList li.HistoryCard {
+    /* width: 20%; */
+    height: 100%;
+    float: left;
+    position: relative;
+    transition: .8s cubic-bezier(0.2,0.8,0.2,1);
+}
+
+.HistoryList li.HistoryCard img {
+    height: 100%;
+}
+
+/* .HistoryGroup:hover li.HistoryCard {
+    width: 10%;
+}
+
+.HistoryGroup li.HistoryCard:hover {
+    width: 60%;
+} */
+
+.HistoryGroup .Content {
+    position: absolute;
+    height: 80%;
+    width: 80%;
+    left: 10%;
+    top: 10%;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    opacity: 0;
+    transition: .8s cubic-bezier(0.2,0.8,0.2,1);
+}
+.HistoryGroup li.HistoryCard:hover .Content {
+    opacity: 1;
+    overflow: auto;
+}
+
+.HistoryGroup .Content ul {
+    list-style: none;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.HistoryGroup .Content li{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 0.3fr 1fr;
+    align-items: center;
+    margin: 10px auto;
+}
+
+.HistoryGroup .Content li img {
+    margin: 5px auto;
+    width: 80%;
+    max-height: 100px;
+    overflow: hidden;
+    align-self: center;
+}
+
+.HistoryGroup .Content .Text h2 {
+    font-size: 15px;
+    font-weight: bolder;
+    background: linear-gradient(104deg, #5151E5 0%, #72EDF2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.HistoryGroup .Content .Text p {
+    font-size: 10px;
+    color: rgba(0,0,0,1);
+    font-weight: bold;
+}
+
+.HistoryGroup .Content .Text label {
+    color: rgba(0,0,0,0.6);
+    font-weight: lighter;
+}
+
+
+@media (max-width: 600px){
+    .HistoryGroup {
+        height: 40vh;
+    }
+}
