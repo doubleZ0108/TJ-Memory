@@ -1,7 +1,6 @@
 package site.doublez.tjmemory.service;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import site.doublez.tjmemory.dao.PictureDao;
@@ -14,10 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

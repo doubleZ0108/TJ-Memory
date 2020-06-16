@@ -12,7 +12,8 @@ var clickDay = null;
 
 var isExistArray = [];
 let obj = null;
-let fresh = null;
+let counter = 0;
+
 
 function initLogic(isAwesome=false){
     var now = $('current-year-month');
@@ -79,12 +80,12 @@ function initLogic(isAwesome=false){
 
         /*========= TODO: 取后端数据 ===========*/
         if(sessionStorage.getItem("isLogin") === "true"){
-            let username = {
+            let calendarInfo = {
                 "username": sessionStorage.getItem("username"),
                 "picyear": changeYear,
                 "picmonth": changeMonth + 1,
             };
-            connectToBackEnd(username, "calendar")
+            connectToBackEnd(calendarInfo, "calendar")
                 .then(result => {
                     obj = [];
                     if(result['state'] === 'true'){
@@ -107,6 +108,7 @@ function initLogic(isAwesome=false){
                             if(existItem != false){
                                 isExistArray.push(j.toString());
                                 $("day-description-" + j).innerHTML = existItem.description;
+
                                 setStyle(DayBgColor, {
                                     background: "url(" + "../db/" + existItem.picurl + ")",
                                 });
@@ -269,7 +271,7 @@ function initLogic(isAwesome=false){
         }
         changeDay = 0; //翻页的时候将选中的日期清空
         printDays(changeYear, changeMonth); //打印下一个月的日期
-    }
+    };
     month_right.onclick = function() {
         if(changeMonth == 12) {
             changeYear++;
@@ -279,13 +281,13 @@ function initLogic(isAwesome=false){
         }
         changeDay = 0;
         printDays(changeYear, changeMonth);
-    }
+    };
 
     year_left.onclick = function(){
         changeYear--;
         changeDay = 0;
         printDays(changeYear, changeMonth);
-    }
+    };
     year_right.onclick = function(){
         changeYear++;
         changeDay = 0;
@@ -343,40 +345,40 @@ function initLogic(isAwesome=false){
                 let myinput = $('myinput');
                 myinput.dispatchEvent(evt);
                 myinput.onchange = function (){
+                    // TODO 用户选择好文件点击确定
                     let imageType = /^image\//;
 
                     if(this.files.length){
-                        let file = this.files[0];
-                        let reader = new FileReader();
-
-                        if (!imageType.test(file.type)) {
-                            alert("请选择图片, 该类型的文件不受支持!");
+                        var _description = prompt("请输入你的回忆描述");
+                        if(_description==null || _description==""){
+                            alert("输入的回忆不能为空");
                             return;
                         }
+                        event.target.parentElement.nextElementSibling.firstElementChild.innerHTML = _description;
+                        isExistArray.push(now.day.toString());
 
-                        //新建 FileReader 对象
-                        reader.onload = function(){
-                            // console.log(this.result);
+                        /******* 多张图片处理逻辑 *********/
+                        let fileappidx = null;
+                        let total = this.files.length;
+                        counter = 0;
 
-                            // TODO 选择完图片
-                            let item = event.target.previousElementSibling.firstElementChild;
-                            setStyle(item, {
-                                background: "url(" + this.result + ")",
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                            });
+                        for(var i=0; i<this.files.length; ++i){
+                            let file = this.files[i];
+                            fileappidx = file.type.substring(file.type.indexOf("/")+1);
+                            let reader = new FileReader();
+                            if (!imageType.test(file.type)) {
+                                alert("请选择图片, 该类型的文件不受支持!");
+                                return;
+                            }
 
+                            let imgbase64 = reader.result;
 
-                            var _description = prompt("请输入你的回忆描述");
-                            if (_description!=null && _description!="")
-                            {
-                                event.target.parentElement.nextElementSibling.firstElementChild.innerHTML = _description;
-
-                                isExistArray.push(now.day.toString());
-
+                            //新建 FileReader 对象
+                            reader.onload = function(){
+                                counter ++;
                                 let _imgname = getIndexStr(now.year) + "-" +
                                     getIndexStr(now.month) + "-" +
-                                    getIndexStr(now.day) + "." + file.type.substring(file.type.indexOf("/")+1);
+                                    getIndexStr(now.day) + "." + fileappidx;
 
                                 let data_from_front = {
                                     username: sessionStorage.getItem("username"),
@@ -386,28 +388,43 @@ function initLogic(isAwesome=false){
                                     description: _description,
                                     imgbase: this.result,
                                     imgurl: sessionStorage.getItem("username") + "/" + _imgname,
+                                    index: counter,
+                                    length: total,
                                 };
-                                console.log(data_from_front);
-                                obj.push(data_from_front);
+
+                                let itemBg = event.target.previousElementSibling.firstElementChild;
+                                setStyle(itemBg, {
+                                    background: "url(" + this.result + ")",
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                });
 
                                 connectToBackEnd(data_from_front, "add_picture")
                                     .then(result => {
-                                        obj = [];
                                         if(result['state'] === 'true'){
-                                            console.log(result);
+
+                                            obj.push({
+                                                description: data_from_front.description,
+                                                picyear: data_from_front.picyear,
+                                                picmonth: data_from_front.picmonth,
+                                                picday: parseInt(data_from_front.picday),
+                                                username: data_from_front.username,
+                                                picurl: data_from_front.imgurl
+                                            });
+
                                         } else {
                                             alert(result['msg'] + "添加图片失败，请刷新尝试");
                                         }
                                     })
                                     .catch(error => console.log(error));
+                            };
 
-                            } else {
-                                //TODO 用户没输入描述
-                            }
+                            // 设置以什么方式读取文件，这里以base64方式
+                            reader.readAsDataURL(file);
 
-                        };
-                        // 设置以什么方式读取文件，这里以base64方式
-                        reader.readAsDataURL(file);
+                        }
+
+                        /******* END 多张图片处理逻辑 *********/
                     }
                 };
             }
@@ -424,7 +441,7 @@ function initLogic(isAwesome=false){
 function isExist(obj, year, month, day){
     for(let i=0;i<obj.length;i++){
         let elem = obj[i];
-        if(year===elem.picyear && month===elem.picmonth && day===elem.picday){
+        if(year==elem.picyear && month==elem.picmonth && day==elem.picday){
             return elem;
         }
     }

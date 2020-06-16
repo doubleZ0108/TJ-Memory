@@ -7,9 +7,11 @@
 
 @create: 2019/11/23
 '''
-
+# coding=utf-8
 from cv2 import cv2
 import numpy as np
+from sys import argv
+import os
 
 '''
 设置拼接后的全景图名字
@@ -99,8 +101,30 @@ def get_full_view_image(filenames, dirname):
 
 if __name__ == '__main__':
     print("connecting to python OK...")
-    # dirname = '../img/test/'
-    dirname = '/Users/doublez/Developer/Digital Media/TJ-Memory/src/main/resources/static/img/test/'
-    filenames = ['0.jpeg', '1.jpeg', '2.jpeg']
+
+    imgurl = argv[1]
+    total = argv[2]
+
+    path = imgurl[:imgurl.index("/")+1]
+    filename = imgurl[imgurl.index("/")+1:imgurl.index(".")]
+    appidx = imgurl[imgurl.index("."):]
+
+    dirname = '/Users/doublez/Developer/Digital Media/TJ-Memory/src/main/resources/static/db/' + path
+    filenames = []
+    for i in range(1,int(total)+1):
+        filenames.append(filename + "-" + str(i) + appidx)
+
     result_name = get_full_view_image(filenames, dirname)
+
+    # 清理中间文件
+    for i in range(1, int(total)+1):
+        os.remove(dirname + filenames[i-1])
+
+    os.rename(dirname+result_name, dirname+filename+appidx)
+
+    for title in os.listdir(dirname):
+        if title.find("_") != -1:
+            os.remove(dirname + title)
+
+
     print("finish panorama stitching...")

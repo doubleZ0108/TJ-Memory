@@ -29,22 +29,4 @@ public class IndexController {
     public String index(){
         return "index";
     }
-
-    public void connect_to_python() {
-        Process proc;
-        try {
-            proc = Runtime.getRuntime().exec("python src/main/resources/static/python/panorama.py");
-            //用输入输出流来截取结果
-            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-            in.close();
-            proc.waitFor();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-//        System.out.println("Java finish calling python...");
-    }
 }
