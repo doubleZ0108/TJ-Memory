@@ -15,4 +15,6 @@ import java.util.ArrayList;
 @Mapper
 public interface PictureDao {
     ArrayList<Picture> select_pictures(CalendarInfo calendarInfo);
+
+    void insert_picture(Picture picture);
 }

@@ -6,6 +6,7 @@ import site.doublez.tjmemory.dao.UserDao;
 import site.doublez.tjmemory.entity.User;
 
 import javax.annotation.Resource;
+import java.io.File;
 
 /**
  * @program: TJ-Memory
@@ -33,5 +34,13 @@ public class UserService {
 
     public boolean check_username_password(User user){
         return userDao.check_username_password(user);
+    }
+
+    public void create_user_db(String username){
+        String filePar = "src/main/resources/static/db/" + username;// 文件夹路径
+        File myPath = new File( filePar );
+        if ( !myPath.exists()){//若此目录不存在，则创建之
+            myPath.mkdir();
+        }
     }
 }

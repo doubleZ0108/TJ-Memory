@@ -3,7 +3,7 @@
 
 <mapper namespace="site.doublez.tjmemory.dao.HistoryPicDao">
 
-    <insert id = "insert_picture" parameterType="site.doublez.tjmemory.entity.HistoryPic">
+    <insert id = "insert_history" parameterType="site.doublez.tjmemory.entity.HistoryPic">
         INSERT INTO
             HistoryPic(ID,USERNAME,PICTIME,DESCRIPTION,IMGURL)
         VALUES

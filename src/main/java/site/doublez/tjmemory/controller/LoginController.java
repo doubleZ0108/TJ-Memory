@@ -46,6 +46,8 @@ public class LoginController {
 
         try{
             if(!userService.is_user_exist(username)){
+                userService.create_user_db(username);
+
                 userService.insert_user(user);
                 result_map.put("state", "true");
             } else {

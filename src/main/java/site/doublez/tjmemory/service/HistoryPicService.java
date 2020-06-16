@@ -20,8 +20,8 @@ public class HistoryPicService {
     @Resource
     private HistoryPicDao historyPicDao;
 
-    public void insert_picture(HistoryPic historyPic){
-        historyPicDao.insert_picture(historyPic);
+    public void insert_history(HistoryPic historyPic){
+        historyPicDao.insert_history(historyPic);
     }
 
     public ArrayList<HistoryPic> select_history(String username){

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  **/
 @Mapper
 public interface HistoryPicDao {
-    void insert_picture(HistoryPic historyOrder);
+    void insert_history(HistoryPic historyOrder);
 
     ArrayList<HistoryPic> select_history(String username);
 }

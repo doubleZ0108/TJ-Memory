@@ -32,4 +32,10 @@ public class HistoryPic {
         this.imgurl = imgurl;
     }
 
+    public HistoryPic(String username, Date pictime, String description, String imgurl) {
+        this.username = username;
+        this.pictime = pictime;
+        this.description = description;
+        this.imgurl = imgurl;
+    }
 }

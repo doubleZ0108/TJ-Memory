@@ -3,12 +3,12 @@
 
 <mapper namespace="site.doublez.tjmemory.dao.PictureDao">
 
-<!--    <insert id = "insert_picture" parameterType="site.doublez.tjmemory.entity.Picture">-->
-<!--        INSERT INTO-->
-<!--            HistoryPic(ID,USERNAME,PICTIME,DESCRIPTION,IMGURL)-->
-<!--        VALUES-->
-<!--            (#{id},#{username},#{pictime},#{description},#{imgurl});-->
-<!--    </insert>-->
+    <insert id = "insert_picture" parameterType="site.doublez.tjmemory.entity.Picture">
+        INSERT INTO
+            Picture(ID,USERNAME,PICURL,PICYEAR,PICMONTH,PICDAY,DESCRIPTION)
+        VALUES
+            (#{id},#{username},#{picurl},#{picyear},#{picmonth},#{picday},#{description});
+    </insert>
 
     <select id="select_pictures" parameterType="site.doublez.tjmemory.entity.CalendarInfo" resultType="site.doublez.tjmemory.entity.Picture">
         SELECT *

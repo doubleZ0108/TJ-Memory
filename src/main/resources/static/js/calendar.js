@@ -12,6 +12,7 @@ var clickDay = null;
 
 var isExistArray = [];
 let obj = null;
+let fresh = null;
 
 function initLogic(isAwesome=false){
     var now = $('current-year-month');
@@ -40,13 +41,17 @@ function initLogic(isAwesome=false){
         for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {
             let DayBgColor = $("day-bgcolor-" + j);
 
-            let existItem = isExist(obj, changeYear, changeMonth+1, j);
-            if(existItem == false){
+            if(sessionStorage.getItem("isLogin") !== "true"){
                 $("day-bgcolor-" + i).style.background = "linear-gradient(135deg,#5EFCE8,#736EFE)";
             } else {
-                setStyle(DayBgColor, {
-                    background: "url(" + "../db/" + existItem.picurl + ")",
-                });
+                let existItem = isExist(obj, changeYear, changeMonth+1, j);
+                if(existItem == false){
+                    $("day-bgcolor-" + i).style.background = "linear-gradient(135deg,#5EFCE8,#736EFE)";
+                } else {
+                    setStyle(DayBgColor, {
+                        background: "url(" + "../db/" + existItem.picurl + ")",
+                    });
+                }
             }
 
             setStyle(DayBgColor, {
@@ -153,7 +158,60 @@ function initLogic(isAwesome=false){
                 })
                 .catch(error => console.log(error));
         } else {
+            console.log("未登陆");
             // TODO 未登陆
+            for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {  //判断变色的日期
+
+                // for basic calendar
+                var DayText = $("day" + j);
+                var DayBgColor = DayText;
+
+                // for awesome calendar
+                if(isAwesome){
+                    DayText = $("day-text-" + j);
+                    DayBgColor = $("day-bgcolor-" + j);
+                }
+
+                setStyle(DayBgColor, {
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                });
+
+
+                DayText.innerHTML = "" + i;
+                if(year == thisYear && month == thisMonth && i.toString() == dayNum) {   //当前日期一直是红色
+                    setStyle(DayBgColor, {
+                        background: '#E96D71'
+                    });
+                }
+                if(i.toString() == changeDay) {     //选中的符合要求的日期显示绿色
+                    DayBgColor.style = "background:#1abc9c";
+                    let freshDay = new Date(changeYear, changeMonth-1, changeDay);
+                    let weekNum = (freshDay.getDay() + 7 - 1) % 7;
+
+                    if(weekNum === 6) {
+                        $("week-bg").style.left = "calc(calc(calc(var(--button-width) + var(--week-padding))*" + weekNum + ") - calc(var(--week-padding)*0.5))";
+                    } else {
+                        $("week-bg").style.left = "calc(calc(var(--button-width) + var(--week-padding))*" + weekNum + ")";
+                    }
+                }
+            }
+
+            // 仅用不属于这个月的信息
+            for(let i = 1; i <= 42; ++i) {
+                let text = null;
+                if(isAwesome){
+                    text = $("day-text-" + i).innerHTML;
+                } else {
+                    text = $("day" + i).innerHTML;
+                }
+
+                if(isNaN(parseInt(text))) {
+                    var Day = $("day" + i);
+                    Day.disabled = "disabled";
+                    Day.style.opacity = "0";
+                }
+            }
         }
     }
 
@@ -267,90 +325,99 @@ function initLogic(isAwesome=false){
         printDays(changeYear, changeMonth);
     };
 
-    async function dblEventCallback(){
-        let now = {
-            year: changeYear,
-            month: changeMonth+1,
-            day: clickDay
-        };
-        if(isExistArray.indexOf(now.day) === -1){
-            /* input file callback */
-            var evt = new MouseEvent("click", {
-                bubbles: false,
-                cancelable: false,
-                view: window
-            });
-            
-            let myinput = $('myinput');
-            myinput.dispatchEvent(evt);
-            myinput.onchange = function (){
-                let imageType = /^image\//;
-
-                if(this.files.length){
-                let file = this.files[0];
-                let reader = new FileReader();
-
-                if (!imageType.test(file.type)) {
-                    alert("请选择图片, 该类型的文件不受支持!");
-                    return;
-                    }
-
-                //新建 FileReader 对象
-                reader.onload = function(){
-                    console.log(this.result);
-                    $("day-bgcolor-" + 10).style.background = "url(" + this.result + ")";
-                };
-                // 设置以什么方式读取文件，这里以base64方式
-                reader.readAsDataURL(file);
-                }
+    async function dblEventCallback(event){
+        if(sessionStorage.getItem("isLogin") === "true"){
+            let now = {
+                year: changeYear,
+                month: changeMonth+1,
+                day: clickDay
             };
+            if(isExistArray.indexOf(now.day) === -1){
+                /* input file callback */
+                var evt = new MouseEvent("click", {
+                    bubbles: false,
+                    cancelable: false,
+                    view: window
+                });
+
+                let myinput = $('myinput');
+                myinput.dispatchEvent(evt);
+                myinput.onchange = function (){
+                    let imageType = /^image\//;
+
+                    if(this.files.length){
+                        let file = this.files[0];
+                        let reader = new FileReader();
+
+                        if (!imageType.test(file.type)) {
+                            alert("请选择图片, 该类型的文件不受支持!");
+                            return;
+                        }
+
+                        //新建 FileReader 对象
+                        reader.onload = function(){
+                            // console.log(this.result);
+
+                            // TODO 选择完图片
+                            let item = event.target.previousElementSibling.firstElementChild;
+                            setStyle(item, {
+                                background: "url(" + this.result + ")",
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                            });
+
+
+                            var _description = prompt("请输入你的回忆描述");
+                            if (_description!=null && _description!="")
+                            {
+                                event.target.parentElement.nextElementSibling.firstElementChild.innerHTML = _description;
+
+                                isExistArray.push(now.day.toString());
+
+                                let _imgname = getIndexStr(now.year) + "-" +
+                                    getIndexStr(now.month) + "-" +
+                                    getIndexStr(now.day) + "." + file.type.substring(file.type.indexOf("/")+1);
+
+                                let data_from_front = {
+                                    username: sessionStorage.getItem("username"),
+                                    picyear: now.year,
+                                    picmonth: now.month,
+                                    picday: now.day,
+                                    description: _description,
+                                    imgbase: this.result,
+                                    imgurl: sessionStorage.getItem("username") + "/" + _imgname,
+                                };
+                                console.log(data_from_front);
+                                obj.push(data_from_front);
+
+                                connectToBackEnd(data_from_front, "add_picture")
+                                    .then(result => {
+                                        obj = [];
+                                        if(result['state'] === 'true'){
+                                            console.log(result);
+                                        } else {
+                                            alert(result['msg'] + "添加图片失败，请刷新尝试");
+                                        }
+                                    })
+                                    .catch(error => console.log(error));
+
+                            } else {
+                                //TODO 用户没输入描述
+                            }
+
+                        };
+                        // 设置以什么方式读取文件，这里以base64方式
+                        reader.readAsDataURL(file);
+                    }
+                };
+            }
+            else{
+                alert("已经添加过回忆~");
+            }
+        } else {
+            alert("登陆以添加回忆!")
         }
     }
-
-    // Array.from(document.querySelectorAll(".cover-content-container")).forEach((card)=>{
-    //     card.addEventListener("dblclick",(e)=>{
-
-    //         let now = {
-    //             year: changeYear,
-    //             month: changeMonth+1,
-    //             day: clickDay
-    //         };
-    //         if(isExistArray.indexOf(now.day) === -1){
-    //             /* input file callback */
-    //             var evt = new MouseEvent("click", {
-    //                 bubbles: false,
-    //                 cancelable: false,
-    //                 view: window
-    //             });
-                
-    //             let myinput = $('myinput');
-    //             myinput.dispatchEvent(evt);
-    //             myinput.onchange = function (){
-    //                 let imageType = /^image\//;
-
-    //                 if(this.files.length){
-    //                 let file = this.files[0];
-    //                 let reader = new FileReader();
-
-    //                 if (!imageType.test(file.type)) {
-    //                     alert("请选择图片, 该类型的文件不受支持!");
-    //                     return;
-    //                     }
-
-    //                 //新建 FileReader 对象
-    //                 reader.onload = function(){
-    //                     console.log(this.result);
-    //                     $("day-bgcolor-" + 10).style.background = "url(" + this.result + ")";
-    //                 };
-    //                 // 设置以什么方式读取文件，这里以base64方式
-    //                 reader.readAsDataURL(file);
-    //                 }
-    //             };
-    //         }
-
-            
-    //     });
-    // });
 }
 
 

@@ -22,7 +22,6 @@ public class IndexController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String root() throws IOException, InterruptedException {
-        connect_to_python();
         return "index";
     }
 
