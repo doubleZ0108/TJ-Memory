@@ -11,7 +11,7 @@ var changeDay = dayNum;
 var clickDay = null;
 
 var isExistArray = [];
-let sdf;
+let obj = null;
 
 function initLogic(isAwesome=false){
     var now = $('current-year-month');
@@ -36,6 +36,26 @@ function initLogic(isAwesome=false){
         }
     }
 
+    function subRefresh(year, month, nowMonthStartDay, numberOfDaysInMonth){
+        for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {
+            let DayBgColor = $("day-bgcolor-" + j);
+
+            let existItem = isExist(obj, changeYear, changeMonth+1, j);
+            if(existItem == false){
+                $("day-bgcolor-" + i).style.background = "linear-gradient(135deg,#5EFCE8,#736EFE)";
+            } else {
+                setStyle(DayBgColor, {
+                    background: "url(" + "../db/" + existItem.picurl + ")",
+                });
+            }
+
+            setStyle(DayBgColor, {
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            });
+        }
+    }
+
     /**
      * 显示某年某月的信息
      */
@@ -53,73 +73,131 @@ function initLogic(isAwesome=false){
         now.innerHTML = monthLetter[month - 1] + '<br />' + year;        //改变title的内容
 
         /*========= TODO: 取后端数据 ===========*/
-        (async function () {
-            let obj = await readJson("testcalendar.json");  //获取这一月的信息
+        if(sessionStorage.getItem("isLogin") === "true"){
+            let username = {
+                "username": sessionStorage.getItem("username"),
+                "picyear": changeYear,
+                "picmonth": changeMonth + 1,
+            };
+            connectToBackEnd(username, "calendar")
+                .then(result => {
+                    obj = [];
+                    if(result['state'] === 'true'){
+                        console.log(result);
+                        obj = result["pictures"];
+                        // TODO 请求后端该年该月数据完毕
+                        for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {  //判断变色的日期
 
-            for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {  //判断变色的日期
+                            // for basic calendar
+                            var DayText = $("day" + j);
+                            var DayBgColor = DayText;
 
-                // for basic calendar
-                var DayText = $("day" + j);
-                var DayBgColor = DayText;
-    
-                // for awesome calendar
-                if(isAwesome){
-                    DayText = $("day-text-" + j);
-                    DayBgColor = $("day-bgcolor-" + j);
-                }
+                            // for awesome calendar
+                            if(isAwesome){
+                                DayText = $("day-text-" + j);
+                                DayBgColor = $("day-bgcolor-" + j);
+                            }
 
-                let existItem = isExist(obj, changeYear, changeMonth+1, j);
-                if(existItem != false){
-                    isExistArray.push(j.toString());
-                    $("day-description-" + j).innerHTML = existItem.description;
-                    setStyle(DayBgColor, {
-                        background: "url(" + existItem.imgUrl + ")",
-                    });
-                }
-                
-                setStyle(DayBgColor, {
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                });
+                            let existItem = isExist(obj, changeYear, changeMonth+1, j);
+                            if(existItem != false){
+                                isExistArray.push(j.toString());
+                                $("day-description-" + j).innerHTML = existItem.description;
+                                setStyle(DayBgColor, {
+                                    background: "url(" + "../db/" + existItem.picurl + ")",
+                                });
+                            }
 
-    
-                DayText.innerHTML = "" + i;
-                if(year == thisYear && month == thisMonth && i.toString() == dayNum) {   //当前日期一直是红色
-                    setStyle(DayBgColor, {
-                        background: '#E96D71',
-                        border: '1px solid yellow',
-                        borderTop: 'none'
-                    });
-                }
-                if(i.toString() == changeDay) {     //选中的符合要求的日期显示绿色
-                    DayBgColor.style = "background:#1abc9c";
-                    let freshDay = new Date(changeYear, changeMonth-1, changeDay);
-                    let weekNum = (freshDay.getDay() + 7 - 1) % 7;
-    
-                    if(weekNum === 6) {
-                        $("week-bg").style.left = "calc(calc(calc(var(--button-width) + var(--week-padding))*" + weekNum + ") - calc(var(--week-padding)*0.5))";
+                            setStyle(DayBgColor, {
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                            });
+
+
+                            DayText.innerHTML = "" + i;
+                            if(year == thisYear && month == thisMonth && i.toString() == dayNum) {   //当前日期一直是红色
+                                setStyle(DayBgColor, {
+                                    background: '#E96D71'
+                                });
+                            }
+                            if(i.toString() == changeDay) {     //选中的符合要求的日期显示绿色
+                                DayBgColor.style = "background:#1abc9c";
+                                let freshDay = new Date(changeYear, changeMonth-1, changeDay);
+                                let weekNum = (freshDay.getDay() + 7 - 1) % 7;
+
+                                if(weekNum === 6) {
+                                    $("week-bg").style.left = "calc(calc(calc(var(--button-width) + var(--week-padding))*" + weekNum + ") - calc(var(--week-padding)*0.5))";
+                                } else {
+                                    $("week-bg").style.left = "calc(calc(var(--button-width) + var(--week-padding))*" + weekNum + ")";
+                                }
+                            }
+                        }
+
+                        // 仅用不属于这个月的信息
+                        for(let i = 1; i <= 42; ++i) {
+                            let text = null;
+                            if(isAwesome){
+                                text = $("day-text-" + i).innerHTML;
+                            } else {
+                                text = $("day" + i).innerHTML;
+                            }
+
+                            if(isNaN(parseInt(text))) {
+                                var Day = $("day" + i);
+                                Day.disabled = "disabled";
+                                Day.style.opacity = "0";
+                            }
+                        }
                     } else {
-                        $("week-bg").style.left = "calc(calc(var(--button-width) + var(--week-padding))*" + weekNum + ")";
+                        alert(result['msg'] + "加载同济日历，请刷新尝试");
                     }
-                }
+                })
+                .catch(error => console.log(error));
+        } else {
+            // TODO 未登陆
+        }
+    }
+
+    function subPrintDays(year, month){
+
+        var nowMonthStartDay = new Date(year, month - 1, 1).getDay();   //当前月第一天是周几
+        if(nowMonthStartDay == 0) {
+            nowMonthStartDay = 7;
+        }
+        var numberOfDaysInMonth = new Date(year, month, 0).getDate();   //当前月有多少天
+
+        subRefresh(year, month, nowMonthStartDay, numberOfDaysInMonth);
+
+
+        for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {  //判断变色的日期
+
+            // for basic calendar
+            var DayText = $("day" + j);
+            var DayBgColor = DayText;
+
+            // for awesome calendar
+            if(isAwesome){
+                DayText = $("day-text-" + j);
+                DayBgColor = $("day-bgcolor-" + j);
             }
-    
-            // 仅用不属于这个月的信息
-            for(let i = 1; i <= 42; ++i) {
-                let text = null;
-                if(isAwesome){
-                    text = $("day-text-" + i).innerHTML;
+
+            DayText.innerHTML = "" + i;
+            if(year == thisYear && month == thisMonth && i.toString() == dayNum) {   //当前日期一直是红色
+                setStyle(DayBgColor, {
+                    background: '#E96D71'
+                });
+            }
+            if(i.toString() == changeDay) {     //选中的符合要求的日期显示绿色
+                DayBgColor.style = "background:#1abc9c";
+                let freshDay = new Date(changeYear, changeMonth-1, changeDay);
+                let weekNum = (freshDay.getDay() + 7 - 1) % 7;
+
+                if(weekNum === 6) {
+                    $("week-bg").style.left = "calc(calc(calc(var(--button-width) + var(--week-padding))*" + weekNum + ") - calc(var(--week-padding)*0.5))";
                 } else {
-                    text = $("day" + i).innerHTML;
-                }
-    
-                if(isNaN(parseInt(text))) {
-                    var Day = $("day" + i);
-                    Day.disabled = "disabled";
-                    Day.style.opacity = "0";
+                    $("week-bg").style.left = "calc(calc(var(--button-width) + var(--week-padding))*" + weekNum + ")";
                 }
             }
-        })();
+        }
     }
 
     printDays(thisYear, thisMonth);
@@ -154,7 +232,7 @@ function initLogic(isAwesome=false){
         changeYear++;
         changeDay = 0;
         printDays(changeYear, changeMonth);
-    }
+    };
 
 
     var click_counter = 0;
@@ -179,15 +257,15 @@ function initLogic(isAwesome=false){
             click_counter = 0;
         }
 
-        printDays(changeYear, changeMonth);
-    }
+        subPrintDays(changeYear, changeMonth);
+    };
 
     $('current-year-month').onclick = function(){
-        printDays(thisYear, thisMonth);
         changeYear = thisYear;
         changeMonth = thisMonth;
         changeDay = today;
-    }
+        printDays(changeYear, changeMonth);
+    };
 
     async function dblEventCallback(){
         let now = {
@@ -279,7 +357,7 @@ function initLogic(isAwesome=false){
 function isExist(obj, year, month, day){
     for(let i=0;i<obj.length;i++){
         let elem = obj[i];
-        if(year===elem.year && month===elem.month && day===elem.day){
+        if(year===elem.picyear && month===elem.picmonth && day===elem.picday){
             return elem;
         }
     }

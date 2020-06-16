@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.doublez.tjmemory.dao.PictureDao">
+
+<!--    <insert id = "insert_picture" parameterType="site.doublez.tjmemory.entity.Picture">-->
+<!--        INSERT INTO-->
+<!--            HistoryPic(ID,USERNAME,PICTIME,DESCRIPTION,IMGURL)-->
+<!--        VALUES-->
+<!--            (#{id},#{username},#{pictime},#{description},#{imgurl});-->
+<!--    </insert>-->
+
+    <select id="select_pictures" parameterType="site.doublez.tjmemory.entity.CalendarInfo" resultType="site.doublez.tjmemory.entity.Picture">
+        SELECT *
+        FROM Picture
+        WHERE (USERNAME=#{username} AND PICYEAR=#{picyear} AND PICMONTH=#{picmonth});
+    </select>
+</mapper>

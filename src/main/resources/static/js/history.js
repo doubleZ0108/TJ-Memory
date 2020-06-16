@@ -12,7 +12,6 @@ function initHistory(){
         connectToBackEnd(username, "history")
             .then(result => {
                 if(result['state'] === 'true'){
-                    console.log(result['history']);
                     console.log("刷新历史图片成功");
 
                     totalNum = result['history'].length;
