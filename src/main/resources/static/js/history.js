@@ -13,7 +13,7 @@ function initHistory(){
             .then(result => {
                 if(result['state'] === 'true'){
                     console.log(result['history']);
-                    console.log("刷新历史订单成功");
+                    console.log("刷新历史图片成功");
 
                     totalNum = result['history'].length;
                     if(totalNum > 0){
@@ -28,35 +28,37 @@ function initHistory(){
                             });
 
                             let historycardImg = $c('img');
-                            historycardImg.src = "../img/tongji/bg/" + index_str + ".png";
+                            // historycardImg.src = "../img/tongji/bg/" + index_str + ".png";
+                            historycardImg.src = "../db/" + card.imgurl;
 
                             let contentDiv = $c('div');
                             contentDiv.classList.add('Content');
 
-                            let contentUl = $c('ul');
-                            card.forEach(function(elem, j){
-                                let contentLi = $c('li');
-                                let contentImg = $c('img');
-                                contentImg.src = "../" + elem.imgsrc;
-                                let contentTextDiv = $c('div');
-                                contentTextDiv.classList.add('Text');
-                                let contentH2 = $c('h2');
-                                contentH2.innerHTML = elem.title;
-                                let contentP1 = $c('p');
-                                contentP1.innerHTML = "购买数量: " + "<label>" + elem.amount + "</label>";
-                                let contentP2 = $c('p');
-                                contentP2.innerHTML = "购买时间: " + "<label>" +
-                                    elem.ordertime.substring(0,elem.ordertime.indexOf(".")).replace("T", " ")
-                                    + "</label>";
-                                contentTextDiv.appendChild(contentH2);
-                                contentTextDiv.appendChild(contentP1);
-                                contentTextDiv.appendChild(contentP2);
-                                contentLi.appendChild(contentImg);
-                                contentLi.appendChild(contentTextDiv);
-                                contentUl.appendChild(contentLi);
-                            });
-
-                            contentDiv.appendChild(contentUl);
+                            contentDiv.innerHTML = card.pictime.slice(0,10) + " " + card.description;
+                            // let contentUl = $c('ul');
+                            // card.forEach(function(elem, j){
+                            //     let contentLi = $c('li');
+                            //     let contentImg = $c('img');
+                            //     contentImg.src = "../" + elem.imgsrc;
+                            //     let contentTextDiv = $c('div');
+                            //     contentTextDiv.classList.add('Text');
+                            //     let contentH2 = $c('h2');
+                            //     contentH2.innerHTML = elem.title;
+                            //     let contentP1 = $c('p');
+                            //     contentP1.innerHTML = "购买数量: " + "<label>" + elem.amount + "</label>";
+                            //     let contentP2 = $c('p');
+                            //     contentP2.innerHTML = "购买时间: " + "<label>" +
+                            //         elem.ordertime.substring(0,elem.ordertime.indexOf(".")).replace("T", " ")
+                            //         + "</label>";
+                            //     contentTextDiv.appendChild(contentH2);
+                            //     contentTextDiv.appendChild(contentP1);
+                            //     contentTextDiv.appendChild(contentP2);
+                            //     contentLi.appendChild(contentImg);
+                            //     contentLi.appendChild(contentTextDiv);
+                            //     contentUl.appendChild(contentLi);
+                            // });
+                            //
+                            // contentDiv.appendChild(contentUl);
 
                             historycardLi.appendChild(historycardImg);
                             historycardLi.appendChild(contentDiv);
@@ -86,10 +88,14 @@ function initHistory(){
                         initEmptyHistory();
                     }
                 } else {
-                    alert(result['msg'] + "加载历史订单失败，请刷新尝试");
+                    alert(result['msg'] + "加载同济印记，请刷新尝试");
+                    initEmptyHistory();
                 }
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+                console.log(error);
+                initEmptyHistory();
+            });
     } else {
         // 未登陆查看历史记录
         initEmptyHistory();

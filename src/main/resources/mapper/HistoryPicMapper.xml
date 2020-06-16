@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.doublez.tjmemory.dao.HistoryPicDao">
+
+    <insert id = "insert_picture" parameterType="site.doublez.tjmemory.entity.HistoryPic">
+        INSERT INTO
+            HistoryPic(ID,USERNAME,PICTIME,DESCRIPTION,IMGURL)
+        VALUES
+            (#{id},#{username},#{pictime},#{description},#{imgurl});
+    </insert>
+
+    <select id="select_history" parameterType="String" resultType="site.doublez.tjmemory.entity.HistoryPic">
+        SELECT *
+        FROM HistoryPic
+        WHERE (USERNAME=#{username} AND PICTIME IN (
+            SELECT PICTIME
+            FROM HistoryPic
+            GROUP BY PICTIME
+            ORDER BY PICTIME ASC
+        ));
+    </select>
+</mapper>
