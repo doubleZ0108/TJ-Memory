@@ -50,7 +50,8 @@ function initLogic(isAwesome=false){
                     $("day-bgcolor-" + i).style.background = "linear-gradient(135deg,#5EFCE8,#736EFE)";
                 } else {
                     setStyle(DayBgColor, {
-                        background: "url(" + "../db/" + existItem.picurl + ")",
+                        // background: "url(" + "../db/" + existItem.picurl + ")",
+                        background: "url(" + existItem.imgbase + ")",
                     });
                 }
             }
@@ -89,7 +90,7 @@ function initLogic(isAwesome=false){
                 .then(result => {
                     obj = [];
                     if(result['state'] === 'true'){
-                        obj = result["pictures"];
+                        obj = result["photos"];
                         // TODO 请求后端该年该月数据完毕
                         for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {  //判断变色的日期
 
@@ -108,15 +109,19 @@ function initLogic(isAwesome=false){
                                 isExistArray.push(j.toString());
                                 $("day-description-" + j).innerHTML = existItem.description;
 
+                                console.log(existItem.imgbase);
                                 setStyle(DayBgColor, {
-                                    background: "url(" + "../db/" + existItem.picurl + ")",
+                                    // background: "url(" + "../db/" + existItem.picurl + ")",
+                                    background: "url(" + existItem.imgbase.replace(/[\r\n]/g,"") + ")",
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
                                 });
                             }
 
-                            setStyle(DayBgColor, {
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                            });
+                            // setStyle(DayBgColor, {
+                            //     backgroundSize: "cover",
+                            //     backgroundPosition: "center",
+                            // });
 
 
                             DayText.innerHTML = "" + i;
@@ -413,6 +418,7 @@ function initLogic(isAwesome=false){
                                                 picmonth: data_from_front.picmonth,
                                                 picday: parseInt(data_from_front.picday),
                                                 username: data_from_front.username,
+                                                imgbase: this.result,
                                                 picurl: data_from_front.imgurl
                                             });
 
@@ -421,6 +427,7 @@ function initLogic(isAwesome=false){
                                         }
                                     })
                                     .catch(error => console.log(error));
+
                             };
 
                             // 设置以什么方式读取文件，这里以base64方式

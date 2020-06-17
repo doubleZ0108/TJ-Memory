@@ -4,9 +4,12 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import site.doublez.tjmemory.entity.DayInfo;
 import site.doublez.tjmemory.entity.HistoryPic;
+import site.doublez.tjmemory.entity.Photo;
 import site.doublez.tjmemory.entity.Picture;
 import site.doublez.tjmemory.service.HistoryPicService;
+import site.doublez.tjmemory.service.PhotoService;
 import site.doublez.tjmemory.service.PictureService;
 import site.doublez.tjmemory.service.PythonConnectorService;
 
@@ -35,6 +38,9 @@ public class CalendarController {
     private PythonConnectorService pythonConnectorService;
 
     @Resource
+    private PhotoService photoService;
+
+    @Resource
     private HistoryPicService historyPicService;
 
 
@@ -42,15 +48,17 @@ public class CalendarController {
     @ResponseBody
     public Map<String, Object> History(@RequestBody Map<String,Object> map) throws ParseException {
         String username = map.get("username").toString();
-        String picyear = map.get("picyear").toString();
-        String picmonth = map.get("picmonth").toString();
+        int picyear = Integer.parseInt(map.get("picyear").toString());
+        int picmonth = Integer.parseInt(map.get("picmonth").toString());
 
         Map<String, Object> result_map = new HashMap<>();
 
         try {
-            ArrayList<Picture> pictureArrayList = pictureService.select_pictures(username, Integer.parseInt(picyear), Integer.parseInt(picmonth));
+//            ArrayList<Picture> pictureArrayList = pictureService.select_pictures(username, Integer.parseInt(picyear), Integer.parseInt(picmonth));
 
-            result_map.put("pictures", pictureArrayList);
+            ArrayList<Photo> photoArrayList = photoService.select_photos_by_year_month(new DayInfo(username, picyear, picmonth));
+
+            result_map.put("photos", photoArrayList);
             result_map.put("state", "true");
         } catch (Exception e){
             e.printStackTrace();
@@ -65,9 +73,9 @@ public class CalendarController {
     @ResponseBody
     public Map<String, Object> AddPicture(@RequestBody Map<String,Object> map) throws ParseException {
         String username = map.get("username").toString();
-        String picyear = map.get("picyear").toString();
-        String picmonth = map.get("picmonth").toString();
-        String picday = map.get("picday").toString();
+        int picyear = Integer.parseInt(map.get("picyear").toString());
+        int picmonth = Integer.parseInt(map.get("picmonth").toString());
+        int picday = Integer.parseInt(map.get("picday").toString());
         String description = map.get("description").toString();
         String imgbase = map.get("imgbase").toString();
         String index = map.get("index").toString();
@@ -89,11 +97,14 @@ public class CalendarController {
             }
 
             try {
-                pictureService.insert_picture(new Picture(username, imgurl,
-                        Integer.parseInt(picyear), Integer.parseInt(picmonth), Integer.parseInt(picday), description));
-                historyPicService.insert_history(new HistoryPic(username,
-                        new Date(Integer.parseInt(picyear)-1900, Integer.parseInt(picmonth)-1, Integer.parseInt(picday)),
-                        description, imgurl));
+                int appidx_index = imgbase.indexOf("base64,");
+                String front_appidx = imgbase.substring(0,appidx_index+7);
+
+                String finalPhotobase = front_appidx + photoService.encode_img_to_base64(imgurl);
+
+                photoService.insert_photo(new Photo(username, picyear, picmonth, picday, finalPhotobase, description, imgurl));
+
+//                result_map.put("photobase", finalPhotobase);
 
                 result_map.put("state", "true");
             } catch (Exception e){

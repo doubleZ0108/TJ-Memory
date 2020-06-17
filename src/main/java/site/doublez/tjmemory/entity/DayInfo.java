@@ -24,4 +24,10 @@ public class DayInfo {
         this.picmonth = picmonth;
         this.picday = picday;
     }
+
+    public DayInfo(String username, int picyear, int picmonth) {
+        this.username = username;
+        this.picyear = picyear;
+        this.picmonth = picmonth;
+    }
 }
