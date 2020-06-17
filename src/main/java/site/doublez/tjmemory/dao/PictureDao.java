@@ -16,5 +16,6 @@ import java.util.ArrayList;
 public interface PictureDao {
     ArrayList<Picture> select_pictures(CalendarInfo calendarInfo);
 
+
     void insert_picture(Picture picture);
 }

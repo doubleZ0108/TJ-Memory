@@ -27,37 +27,14 @@ function initHistory(){
                             });
 
                             let historycardImg = $c('img');
-                            // historycardImg.src = "../img/tongji/bg/" + index_str + ".png";
+                            //TODO history image路径
                             historycardImg.src = "../db/" + card.imgurl;
 
                             let contentDiv = $c('div');
                             contentDiv.classList.add('Content');
 
                             contentDiv.innerHTML = card.pictime.slice(0,10) + " " + card.description;
-                            // let contentUl = $c('ul');
-                            // card.forEach(function(elem, j){
-                            //     let contentLi = $c('li');
-                            //     let contentImg = $c('img');
-                            //     contentImg.src = "../" + elem.imgsrc;
-                            //     let contentTextDiv = $c('div');
-                            //     contentTextDiv.classList.add('Text');
-                            //     let contentH2 = $c('h2');
-                            //     contentH2.innerHTML = elem.title;
-                            //     let contentP1 = $c('p');
-                            //     contentP1.innerHTML = "购买数量: " + "<label>" + elem.amount + "</label>";
-                            //     let contentP2 = $c('p');
-                            //     contentP2.innerHTML = "购买时间: " + "<label>" +
-                            //         elem.ordertime.substring(0,elem.ordertime.indexOf(".")).replace("T", " ")
-                            //         + "</label>";
-                            //     contentTextDiv.appendChild(contentH2);
-                            //     contentTextDiv.appendChild(contentP1);
-                            //     contentTextDiv.appendChild(contentP2);
-                            //     contentLi.appendChild(contentImg);
-                            //     contentLi.appendChild(contentTextDiv);
-                            //     contentUl.appendChild(contentLi);
-                            // });
-                            //
-                            // contentDiv.appendChild(contentUl);
+
 
                             historycardLi.appendChild(historycardImg);
                             historycardLi.appendChild(contentDiv);

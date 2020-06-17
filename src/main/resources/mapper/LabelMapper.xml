@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.doublez.tjmemory.dao.LabelDao">
+
+    <insert id = "insert_label" parameterType="site.doublez.tjmemory.entity.Label">
+        INSERT INTO
+            Label(ID,USERNAME,PICYEAR,PICMONTH,PICDAY,LAT,LON,DESCRIPTION)
+        VALUES
+            (#{id},#{username},#{picyear},#{picmonth},#{picday},#{lat},#{lon},#{description});
+    </insert>
+
+    <select id="select_label" parameterType="site.doublez.tjmemory.entity.DayInfo" resultType="site.doublez.tjmemory.entity.Label">
+        SELECT *
+        FROM Label
+        WHERE (USERNAME=#{username} AND PICYEAR=#{picyear} AND PICMONTH=#{picmonth} AND PICDAY=#{picday});
+    </select>
+</mapper>

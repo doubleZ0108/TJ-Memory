@@ -89,7 +89,6 @@ function initLogic(isAwesome=false){
                 .then(result => {
                     obj = [];
                     if(result['state'] === 'true'){
-                        console.log(result);
                         obj = result["pictures"];
                         // TODO 请求后端该年该月数据完毕
                         for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {  //判断变色的日期
@@ -318,6 +317,11 @@ function initLogic(isAwesome=false){
         }
 
         subPrintDays(changeYear, changeMonth);
+
+        if(isExistArray.indexOf(clickDay) !== -1){
+            panoramaHref(changeYear, changeMonth+1, clickDay);
+        }
+
     };
 
     $('current-year-month').onclick = function(){
@@ -446,4 +450,10 @@ function isExist(obj, year, month, day){
         }
     }
     return false;
+}
+
+
+function panoramaHref(year, month, day){
+    let elem = isExist(obj, year, month, day);
+    window.location.href = "panorama?" + "imgurl=" + elem.picurl;
 }

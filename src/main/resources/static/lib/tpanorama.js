@@ -7,7 +7,7 @@
     var _raycaster;
     var _container;
     var _isUserInteracting = false;
-    var _lon = 0, _lat = 0;
+    var _lon = 180, _lat = 0;   //初始转动180度
     var _onPointerDownLon = 0, _onPointerDownLat = 0;       // 当前scene的经纬度
     var _onPointerDownPointerX = 0, _onPointerDownPointerY = 0; // 当前鼠标点击屏幕的坐标
     var _mouse = new THREE.Vector2();
@@ -31,7 +31,7 @@
         maxFocalLength: 100,//镜头最大拉近距离
         sprite: 'label', // label,icon
         onClick: () => { }
-    }
+    };
 
 
     function tpanorama(opt) {
@@ -52,6 +52,7 @@
             makePanorama(this.def.pRadius, this.def.widthSegments, this.def.heightSegments, this.def.url);
             initRenderer();
             initLable(this.def.lables, this.def.sprite);
+
 
             /* ============= myPanorama =============== */
             _container.addEventListener('dblclick', mydblClickHandler, false);
@@ -113,8 +114,29 @@
             // _sprites.push(createSprite(myLable.position, myLable.logoUrl, myLable.text));
             _lables.push(createLableSprite(_sceneOrtho, myLable.text, myLable.position));
         } else {
-            console.log("no");
+            console.log("添加标签失败，请稍后重试");
         }
+
+        let data_from_front = {
+            username: sessionStorage.getItem("username"),
+            picyear: year,
+            picmonth: month,
+            picday: day,
+            lat: myLat,
+            lon: myLon,
+            description: myLabelText
+        };
+
+        connectToBackEnd(data_from_front, "add_label")
+            .then(result => {
+                if(result['state'] === 'true'){
+
+                } else {
+                    alert(result['msg'] + "写入标签，请刷新尝试");
+                    initEmptyHistory();
+                }
+            })
+            .catch(error => console.log(error));
 
         render();
     }
