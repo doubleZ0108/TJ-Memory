@@ -91,6 +91,10 @@ function initLogic(isAwesome=false){
                     obj = [];
                     if(result['state'] === 'true'){
                         obj = result["photos"];
+
+                        //TODO init history
+                        initHistory(result["photos"]);
+
                         // TODO 请求后端该年该月数据完毕
                         for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {  //判断变色的日期
 
@@ -109,7 +113,6 @@ function initLogic(isAwesome=false){
                                 isExistArray.push(j.toString());
                                 $("day-description-" + j).innerHTML = existItem.description;
 
-                                console.log(existItem.imgbase);
                                 setStyle(DayBgColor, {
                                     // background: "url(" + "../db/" + existItem.picurl + ")",
                                     background: "url(" + existItem.imgbase.replace(/[\r\n]/g,"") + ")",

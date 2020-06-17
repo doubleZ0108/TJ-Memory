@@ -9,7 +9,8 @@ window.onload = function(){
 
     initWaveSection();
 
-    initHistory();
+    // initHistory();
+    initEmptyHistory();
 };
 
 

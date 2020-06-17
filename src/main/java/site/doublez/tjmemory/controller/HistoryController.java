@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import site.doublez.tjmemory.dao.HistoryPicDao;
 import site.doublez.tjmemory.entity.HistoryPic;
+import site.doublez.tjmemory.entity.Photo;
 import site.doublez.tjmemory.service.HistoryPicService;
+import site.doublez.tjmemory.service.PhotoService;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +33,9 @@ public class HistoryController {
 
     @Resource
     private HistoryPicService historyPicService;
+
+    @Resource
+    private PhotoService photoService;
 
     @PostMapping("/history")
     @ResponseBody

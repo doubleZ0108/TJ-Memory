@@ -58,6 +58,8 @@ public class CalendarController {
 
             ArrayList<Photo> photoArrayList = photoService.select_photos_by_year_month(new DayInfo(username, picyear, picmonth));
 
+            System.out.println("finish chaxun");
+            
             result_map.put("photos", photoArrayList);
             result_map.put("state", "true");
         } catch (Exception e){
