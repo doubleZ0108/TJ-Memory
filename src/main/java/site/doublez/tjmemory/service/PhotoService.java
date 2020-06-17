@@ -1,17 +1,19 @@
 package site.doublez.tjmemory.service;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import site.doublez.tjmemory.dao.PhotoDao;
 import site.doublez.tjmemory.entity.DayInfo;
 import site.doublez.tjmemory.entity.Photo;
+import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @program: TJ-Memory
@@ -51,5 +53,58 @@ public class PhotoService {
 
         BASE64Encoder encoder = new BASE64Encoder();
         return encoder.encode(data);
+    }
+
+    public void write_imgbase64_to_local(String imgbase, String imgurl){
+        String basepath = "src/main/resources/static/db/";
+        saveImg(imgbase, basepath + imgurl);
+    }
+
+    // 图片路劲层级分隔符
+    private static String separator = "/";
+
+
+    public void saveImg(String baseImg, String imgurl){
+        //定义一个正则表达式的筛选规则，为了获取图片的类型
+        String rgex = "data:image/(.*?);base64";
+        String type = getSubUtilSimple(baseImg, rgex);
+        //去除base64图片的前缀
+        baseImg = baseImg.replaceFirst("data:(.+?);base64,", "");
+        byte[] b;
+        byte[] bs;
+        OutputStream os = null;
+
+        //把图片转换成二进制
+        b = Base64.decode(baseImg.replaceAll(" ", "+"));
+
+        File imageFile = new File(imgurl);
+        BASE64Decoder d = new BASE64Decoder();
+        // 保存
+        try {
+            bs = d.decodeBuffer(Base64.encode(b));
+            os = new FileOutputStream(imageFile);
+            os.write(bs);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.getLocalizedMessage();
+                }
+            }
+        }
+    }
+
+
+    public static String getSubUtilSimple(String soap,String rgex){
+        Pattern pattern = Pattern.compile(rgex);
+        Matcher m = pattern.matcher(soap);
+        while(m.find()){
+            return m.group(1);
+        }
+        return "";
     }
 }

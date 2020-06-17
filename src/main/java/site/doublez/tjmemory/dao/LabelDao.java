@@ -2,7 +2,6 @@ package site.doublez.tjmemory.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import site.doublez.tjmemory.entity.DayInfo;
-import site.doublez.tjmemory.entity.HistoryPic;
 import site.doublez.tjmemory.entity.Label;
 
 import java.util.ArrayList;

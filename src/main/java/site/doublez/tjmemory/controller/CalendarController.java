@@ -5,19 +5,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import site.doublez.tjmemory.entity.DayInfo;
-import site.doublez.tjmemory.entity.HistoryPic;
 import site.doublez.tjmemory.entity.Photo;
-import site.doublez.tjmemory.entity.Picture;
-import site.doublez.tjmemory.service.HistoryPicService;
 import site.doublez.tjmemory.service.PhotoService;
-import site.doublez.tjmemory.service.PictureService;
 import site.doublez.tjmemory.service.PythonConnectorService;
 
 import javax.annotation.Resource;
-import java.net.Inet4Address;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,18 +25,12 @@ import java.util.Map;
 @ComponentScan({"site.doublez.tjmemory.service"})
 @MapperScan("site.doublez.tjmemory.dao")
 public class CalendarController {
-    @Resource
-    private PictureService pictureService;
 
     @Resource
     private PythonConnectorService pythonConnectorService;
 
     @Resource
     private PhotoService photoService;
-
-    @Resource
-    private HistoryPicService historyPicService;
-
 
     @PostMapping("/calendar")
     @ResponseBody
@@ -59,7 +47,7 @@ public class CalendarController {
             ArrayList<Photo> photoArrayList = photoService.select_photos_by_year_month(new DayInfo(username, picyear, picmonth));
 
             System.out.println("finish chaxun");
-            
+
             result_map.put("photos", photoArrayList);
             result_map.put("state", "true");
         } catch (Exception e){
@@ -91,7 +79,7 @@ public class CalendarController {
         if(length > 1){
             stringBuilder.insert(stringBuilder.indexOf("."), "-" + index);
         }
-        pictureService.write_imgbase64_to_local(imgbase, stringBuilder.toString());
+        photoService.write_imgbase64_to_local(imgbase, stringBuilder.toString());
 
         if(Integer.parseInt(index) == length){    // 所有图片已经提交
             if(length > 1){

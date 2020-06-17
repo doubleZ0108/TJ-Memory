@@ -81,6 +81,9 @@ function initLogic(isAwesome=false){
 
         /*========= TODO: 取后端数据 ===========*/
         if(sessionStorage.getItem("isLogin") === "true"){
+
+            startLoader();
+
             let calendarInfo = {
                 "username": sessionStorage.getItem("username"),
                 "picyear": changeYear,
@@ -88,6 +91,9 @@ function initLogic(isAwesome=false){
             };
             connectToBackEnd(calendarInfo, "calendar")
                 .then(result => {
+
+                    stopLoad();
+
                     obj = [];
                     if(result['state'] === 'true'){
                         obj = result["photos"];

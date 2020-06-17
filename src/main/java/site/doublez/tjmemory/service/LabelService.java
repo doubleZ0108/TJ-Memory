@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import site.doublez.tjmemory.dao.LabelDao;
 import site.doublez.tjmemory.entity.DayInfo;
 import site.doublez.tjmemory.entity.Label;
-import site.doublez.tjmemory.entity.Picture;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../css/calendar.css">
     <link rel="stylesheet" href="../css/wavesection.css">
     <link rel="stylesheet" href="../css/history.css">
+    <link rel="stylesheet" href="../css/loader.css">
     <link rel="stylesheet" href="//at.alicdn.com/t/font_1838331_x3slqm5zsir.css" />
 
     <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
@@ -29,6 +30,7 @@
     <script src="../js/calendar.js"></script>
     <script src="../js/awesome-calendar.js"></script>
     <script src="../js/wavesection.js"></script>
+    <script src="../js/loader.js"></script>
     <script src="../js/history.js"></script>
 </head>
 <body>
@@ -170,6 +172,40 @@
             (仅做课程项目使用, 图转侵删)<br/>
             <a href="http://www.beian.miit.gov.cn/" target="_blank">吉ICP备20002957号</a>
         </p>
+    </div>
+
+
+    <!-- loader -->
+    <div id="LoaderGroup" class="LoaderGroup">
+        <div class="loadercontainer">
+            <div class="loader">
+                <div class="liquid">
+                    <span style="--i:1;"></span>
+                    <span style="--i:2;"></span>
+                    <span style="--i:3;"></span>
+                    <span style="--i:4;"></span>
+                    <span style="--i:5;"></span>
+                    <span style="--i:6;"></span>
+                    <span style="--i:7;"></span>
+                </div>
+                <div id="bar" class="bar"></div>
+            </div>
+            <div class="text" onmouseover="LoaderMouseOver();" onmouseleave="LoaderMouseLeave();">全景日历正在加载中</div>
+        </div>
+
+        <svg>
+            <filter id="gooey">
+                <!--        模糊滤镜-->
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10"/>
+                <!--        透明度滤镜-->
+                <feColorMatrix values="
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 20 -10
+                "/>
+            </filter>
+        </svg>
     </div>
 </body>
     
