@@ -4,14 +4,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.85);
     z-index: -1;
 
     opacity: 0;
     transition: 2s cubic-bezier(0.2,0.8,0.2,1);
 }
 
-svg {
+.LoaderGroup svg {
     width: 0;
     height: 0;
 }

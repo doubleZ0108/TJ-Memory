@@ -16,5 +16,5 @@ function initWaveSection() {
             });
         })
         .catch(error => console.log(error));
-    }, 6180);
+    }, 5000);
 }

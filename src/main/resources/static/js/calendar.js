@@ -471,5 +471,7 @@ function isExist(obj, year, month, day){
 
 function panoramaHref(year, month, day){
     let elem = isExist(obj, year, month, day);
-    window.location.href = "panorama?" + "imgurl=" + elem.picurl;
+    // window.location.href = "panorama?target=_blank&" + "imgurl=" + elem.picurl;
+    let hrefurl = elem.picurl.replace("-comp", "");
+    window.open("panorama?" + "imgurl=" + hrefurl, "_blank");
 }

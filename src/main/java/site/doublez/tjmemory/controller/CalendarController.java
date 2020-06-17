@@ -1,5 +1,6 @@
 package site.doublez.tjmemory.controller;
 
+import net.coobird.thumbnailator.Thumbnails;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,8 @@ import site.doublez.tjmemory.service.PhotoService;
 import site.doublez.tjmemory.service.PythonConnectorService;
 
 import javax.annotation.Resource;
+import java.awt.*;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +49,7 @@ public class CalendarController {
 
             ArrayList<Photo> photoArrayList = photoService.select_photos_by_year_month(new DayInfo(username, picyear, picmonth));
 
-            System.out.println("finish chaxun");
+            System.out.println("finish select from db");
 
             result_map.put("photos", photoArrayList);
             result_map.put("state", "true");
@@ -61,7 +64,7 @@ public class CalendarController {
 
     @PostMapping("/add_picture")
     @ResponseBody
-    public Map<String, Object> AddPicture(@RequestBody Map<String,Object> map) throws ParseException {
+    public Map<String, Object> AddPicture(@RequestBody Map<String,Object> map) throws ParseException, IOException {
         String username = map.get("username").toString();
         int picyear = Integer.parseInt(map.get("picyear").toString());
         int picmonth = Integer.parseInt(map.get("picmonth").toString());
@@ -79,7 +82,16 @@ public class CalendarController {
         if(length > 1){
             stringBuilder.insert(stringBuilder.indexOf("."), "-" + index);
         }
+
+        //将base64写入本地
         photoService.write_imgbase64_to_local(imgbase, stringBuilder.toString());
+
+        //图片压缩
+        String basepath = "src/main/resources/static/db/";
+        String appidx = imgurl.substring(imgurl.indexOf("."));
+        String filename = imgurl.substring(0,imgurl.indexOf("."));
+        String newimgurl = filename + "-comp" + appidx;
+
 
         if(Integer.parseInt(index) == length){    // 所有图片已经提交
             if(length > 1){
@@ -87,12 +99,23 @@ public class CalendarController {
             }
 
             try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Thumbnails.of(basepath + imgurl).scale(0.2).toFile(basepath + newimgurl);
+
+//            Robot timeRobot = new Robot();
+//            timeRobot.delay(5000);
+
+            try {
                 int appidx_index = imgbase.indexOf("base64,");
                 String front_appidx = imgbase.substring(0,appidx_index+7);
 
-                String finalPhotobase = front_appidx + photoService.encode_img_to_base64(imgurl);
+                String finalPhotobase = front_appidx + photoService.encode_img_to_base64(newimgurl);
 
-                photoService.insert_photo(new Photo(username, picyear, picmonth, picday, finalPhotobase, description, imgurl));
+                photoService.insert_photo(new Photo(username, picyear, picmonth, picday, finalPhotobase, description, newimgurl));
 
 //                result_map.put("photobase", finalPhotobase);
 

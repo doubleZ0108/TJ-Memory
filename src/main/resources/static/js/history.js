@@ -40,10 +40,11 @@ function initHistory(photosobj){
 
     let totalNum = 0;
     let history = $('HistoryList');
-    history.innerHTML = "";
 
     totalNum = photosobj.length;
     if(totalNum > 0){
+        history.innerHTML = "";
+
         photosobj.forEach(function (card, i) {
             let index = i%12 + 1;
             let index_str = getIndexStr(index);
