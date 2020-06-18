@@ -2,7 +2,6 @@ window.onload = function(){
     initNavigation();
    
     initHero();
-    initSocialMedia();
 
     initAwesomeStructure();
     initLogic(true);
@@ -11,7 +10,7 @@ window.onload = function(){
 
     // initHistory();
     initEmptyHistory();
+
+    initShare();
+    initSocialMedia();
 };
-
-
-

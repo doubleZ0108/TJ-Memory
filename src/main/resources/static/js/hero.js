@@ -23,6 +23,8 @@ function initHero(){
                 this.subtitle = heroObj.subtitle;
                 this.quote = heroObj.quote;
                 this.styleObject.backgroundImage = "url(" + "https:" + heroObj.bg.fields.file.url + ")";
+
+                console.log("https:" + heroObj.bg.fields.file.url);
             }
         }
     });

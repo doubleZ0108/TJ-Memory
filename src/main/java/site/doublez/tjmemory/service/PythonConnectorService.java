@@ -19,7 +19,10 @@ public class PythonConnectorService {
     public void connect_to_python(String imgurl, int length) {
         Process proc;
         try {
-            String[] cmdArr = new String[] {"python", "src/main/resources/static/python/panorama.py",imgurl, String.valueOf(length)};
+//            String python_file_path = "src/main/resources/static/python/panorama.py";
+            String python_file_path = "/root/Developer/Python/panorama.py";
+
+            String[] cmdArr = new String[] {"python", python_file_path, imgurl, String.valueOf(length)};
 
             proc = Runtime.getRuntime().exec(cmdArr);
             //用输入输出流来截取结果

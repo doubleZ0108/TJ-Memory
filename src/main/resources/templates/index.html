@@ -15,11 +15,16 @@
     <link rel="stylesheet" href="../css/wavesection.css">
     <link rel="stylesheet" href="../css/history.css">
     <link rel="stylesheet" href="../css/loader.css">
+    <link rel="stylesheet" href="../css/myshare.css">
+
+    <link rel="stylesheet" href="../lib/share.min.css">
     <link rel="stylesheet" href="//at.alicdn.com/t/font_1838331_x3slqm5zsir.css" />
+    <link rel="shortcut icon" href="../img/favicon.ico" />
 
     <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script src="../lib/social-share.min.js"></script>
     
     <script src="../js/contentful.api.js"></script>
     <script src="../js/index.js"></script>
@@ -32,6 +37,7 @@
     <script src="../js/wavesection.js"></script>
     <script src="../js/loader.js"></script>
     <script src="../js/history.js"></script>
+    <script src="../js/myshare.js"></script>
 </head>
 <body>
 
@@ -160,6 +166,12 @@
 
     
     <div class="gap"></div>
+
+    <!-- share -->
+    <a class="NavigatorAnchor" id="share-anchor">share-anchor</a>
+    <div class="ShareGroup">
+        <div id="myshare"></div>
+    </div>
 
     <!-- social media -->
     <a class="NavigatorAnchor" id="social-media-anchor">
