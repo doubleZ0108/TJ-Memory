@@ -65,7 +65,7 @@ public class PhotoService {
 
 
     public void saveImg(String baseImg, String imgurl){
-        //定义一个正则表达式的筛选规则，为了获取图片的类型
+        //正则表达式的筛选规则，为了获取图片的类型
         String rgex = "data:image/(.*?);base64";
         String type = getSubUtilSimple(baseImg, rgex);
         //去除base64图片的前缀

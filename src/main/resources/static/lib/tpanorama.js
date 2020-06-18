@@ -81,7 +81,7 @@
 
             animate();
         }
-    }
+    };
 
     /* ============= myPanorama =============== */
     function dblEventCallback(event){
