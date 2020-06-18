@@ -2,9 +2,9 @@
 
 🌐 [济·忆 | TJ-Memory](http://tj-memory.doublez.site/)
 
-🎥 [网页视频 | Intro Video]()
+🎥 [网页视频 | Intro Video](https://b23.tv/gMvhLr)
 
- 📦[](https://github.com/doubleZ0108/TJ-Memory/releases/tag/v1.0)
+ 📦[tj-memory-0.0.1-SNAPSHOT](https://github.com/doubleZ0108/TJ-Memory/releases/tag/v1.0)
 
 #### Table of Contents
 
@@ -167,9 +167,12 @@
 
 - **框架技术**
 
-  - 前端：原生HTML + CSS + JavaScript
+  - 前端：
 
-    > 仅有一处使用Vue框架，主要为了全方面学习
+    - 原生HTML + CSS + JavaScript
+    - three.js
+
+    > ​	仅有一处使用Vue框架，主要为了全方面学习
 
   - 后端：SpringBoot + Maven + Mysql + MyBatis
 
