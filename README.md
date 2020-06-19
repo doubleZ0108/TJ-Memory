@@ -176,6 +176,18 @@
 
   - 后端：SpringBoot + Maven + Mysql + MyBatis
 
+- **主要依赖**: opencv-python
+
+  > 其中涉及到版本问题，环境需要进行如下配置
+  >
+  > ```shell
+  > pip uninstall opencv-python
+  > pip install opencv-python==3.4.2.16 -i "https://pypi.doubanio.com/simple/"
+  > pip install opencv-contrib-python==3.4.2.16 -i "https://pypi.doubanio.com/simple/"
+  > ```
+  >
+  > 
+
 - **CMS**: Contentful
 
   > 部分图片资源来自网络，侵删
