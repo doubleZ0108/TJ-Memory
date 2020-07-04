@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="site.doublez.tjmemory.dao.PhotoDao">
 
-    <insert id = "insert_photo" parameterType="site.doublez.tjmemory.entity.Photo">
+<insert id = "insert_photo" parameterType="site.doublez.tjmemory.entity.Photo">
         INSERT INTO
             Photo(ID,USERNAME,PICYEAR,PICMONTH,PICDAY,IMGBASE,DESCRIPTION,PICURL)
         VALUES
             (#{id},#{username},#{picyear},#{picmonth},#{picday},#{imgbase},#{description},#{picurl});
     </insert>
 
-    <select id="select_photos_by_year_month" parameterType="site.doublez.tjmemory.entity.DayInfo" resultType="site.doublez.tjmemory.entity.Photo">
+<select id="select_photos_by_year_month" parameterType="site.doublez.tjmemory.entity.DayInfo" resultType="site.doublez.tjmemory.entity.Photo">
         SELECT *
         FROM Photo
         WHERE (USERNAME=#{username} AND PICYEAR=#{picyear} AND PICMONTH=#{picmonth});
     </select>
 
-    <select id="select_photo_by_date" parameterType="site.doublez.tjmemory.entity.DayInfo" resultType="site.doublez.tjmemory.entity.Photo">
+<select id="select_photo_by_date" parameterType="site.doublez.tjmemory.entity.DayInfo" resultType="site.doublez.tjmemory.entity.Photo">
         SELECT *
         FROM Photo
         WHERE (USERNAME=#{username} AND PICYEAR=#{picyear} AND PICMONTH=#{picmonth} AND PICDAY=#{picday});

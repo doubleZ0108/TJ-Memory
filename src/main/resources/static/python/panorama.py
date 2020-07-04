@@ -105,6 +105,8 @@ if __name__ == '__main__':
     imgurl = argv[1]
     total = argv[2]
 
+    print(imgurl, total)
+
     path = imgurl[:imgurl.index("/")+1]
     filename = imgurl[imgurl.index("/")+1:imgurl.index(".")]
     appidx = imgurl[imgurl.index("."):]
@@ -122,9 +124,9 @@ if __name__ == '__main__':
 
     os.rename(dirname+result_name, dirname+filename+appidx)
 
-    for title in os.listdir(dirname):
-        if title.find("_") != -1:
-            os.remove(dirname + title)
+    # for title in os.listdir(dirname):
+    #     if title.find("_") != -1:
+    #         os.remove(dirname + title)
 
 
     print("finish panorama stitching...")

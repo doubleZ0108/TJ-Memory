@@ -39,28 +39,42 @@ function initLogic(isAwesome=false){
     }
 
     function subRefresh(year, month, nowMonthStartDay, numberOfDaysInMonth){
+        let save_img_day = [];
         for(var i = 1, j = nowMonthStartDay; i <= numberOfDaysInMonth; i++, j++) {
             let DayBgColor = $("day-bgcolor-" + j);
 
             if(sessionStorage.getItem("isLogin") !== "true"){
                 $("day-bgcolor-" + i).style.background = "linear-gradient(135deg,#5EFCE8,#736EFE)";
             } else {
-                let existItem = isExist(obj, changeYear, changeMonth+1, j);
+                let save_day_index = j;
+                let save_day = $("day-bgcolor-" + save_day_index);
+                let existItem = isExist(obj, changeYear, changeMonth+1, i);
                 if(existItem == false){
-                    $("day-bgcolor-" + i).style.background = "linear-gradient(135deg,#5EFCE8,#736EFE)";
+                    save_day.style.background = "linear-gradient(135deg,#5EFCE8,#736EFE)";
                 } else {
-                    setStyle(DayBgColor, {
-                        // background: "url(" + "../db/" + existItem.picurl + ")",
+                    setStyle(save_day, {
                         background: "url(" + existItem.imgbase + ")",
                     });
                 }
-            }
 
-            setStyle(DayBgColor, {
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            });
+                setStyle(save_day, {
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                });
+            }
         }
+
+        // save_img_day.forEach(function (day_index) {
+        //     let existItem = isExist(obj, changeYear, changeMonth+1, day_index);
+        //     let save_day = $("day-bgcolor-" + (day_index+nowMonthStartDay-1));
+        //     setStyle(save_day, {
+        //         background: "url(" + existItem.imgbase + ")",
+        //     });
+        //     setStyle(save_day, {
+        //         backgroundSize: "cover",
+        //         backgroundPosition: "center",
+        //     });
+        // });
     }
 
     /**
@@ -109,6 +123,7 @@ function initLogic(isAwesome=false){
                             var DayBgColor = DayText;
 
                             // for awesome calendar
+                            let exact_index = j + nowMonthStartDay - 1;
                             if(isAwesome){
                                 DayText = $("day-text-" + j);
                                 DayBgColor = $("day-bgcolor-" + j);
@@ -117,9 +132,9 @@ function initLogic(isAwesome=false){
                             let existItem = isExist(obj, changeYear, changeMonth+1, j);
                             if(existItem != false){
                                 isExistArray.push(j.toString());
-                                $("day-description-" + j).innerHTML = existItem.description;
+                                $("day-description-" + exact_index).innerHTML = existItem.description;
 
-                                setStyle(DayBgColor, {
+                                setStyle($("day-bgcolor-" + exact_index), {
                                     // background: "url(" + "../db/" + existItem.picurl + ")",
                                     background: "url(" + existItem.imgbase.replace(/[\r\n]/g,"") + ")",
                                     backgroundSize: "cover",
