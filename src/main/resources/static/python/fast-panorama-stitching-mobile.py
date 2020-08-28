@@ -4,20 +4,11 @@ import numpy as np
 from PIL import Image
 import imageio
 from  matplotlib import pyplot as plt
-get_ipython().run_line_magic('matplotlib', 'inline')
+from sys import argv
+import os
 
 # %% [markdown]
 # ## reading images
-
-# %%
-imgs_dir = '../img/1/'
-files = glob.glob(imgs_dir + 'in-*.*g')   # list of matching file paths
-files = sorted(files)
-
-imgs = [np.array(Image.open(files[i])) for i in range(len(files))]
-
-factor = 0
-shift = [imgs[0].shape[1] // (3 + factor)]*(len(imgs)-1)      # overlap range(hyper parameter)
 
 # %% [markdown]
 # ## select the "best" image
@@ -33,7 +24,6 @@ def getBestImgIndex(imgs):
             best_index = index
             best_value = diff
     return best_index
-best_img_index = getBestImgIndex(imgs)
 
 # %% [markdown]
 # ## color correction
@@ -72,7 +62,6 @@ def colorCorrection(images_temp, shift, bestIndex, gamma=2.2):      # set gamma 
                 images_temp[i][:,:,channel] = np.power(G[channel] * alpha[channel, i], 1.0/gamma) * images_temp[i][:,:,channel]
     return images_temp
 
-imgs_corrected = colorCorrection(imgs, shift, best_img_index)
 
 # %% [markdown]
 # ## optimal seam finding
@@ -146,28 +135,53 @@ def stitchImage(panorama, curr_img, path, overlap):
 # %% [markdown]
 # # main
 
-# %%
-panorama = imgs_corrected[0]
-for i in range(1, len(imgs_corrected)):
-    curr_img = imgs_corrected[i]
-    channel = np.argmax([np.var(curr_img[:,:,0]), np.var(curr_img[:,:,1]), np.var(curr_img[:,:,2])])       # get the channel with the largest mean variance
-
-    overlap = curr_img.shape[1] - shift[i-1]
-
-    error_surface = calcErrorSurface(panorama, curr_img, overlap, channel)
-
-    E = calcSeam(error_surface)
-
-    path = calcSeamPath(E, error_surface)
-
-    panorama = stitchImage(panorama, curr_img, path, overlap)
-
-result = np.array(255*panorama/np.max(panorama)).astype('uint8')
-plt.figure()
-plt.imshow(result)
-imageio.imwrite(imgs_dir+'output.png', np.array(255*panorama/np.max(panorama)).astype('uint8'))
-
 
 # %%
+if __name__ == '__main__':
 
+    print("connecting to python OK...")
 
+    imgurl = argv[1]
+    total = argv[2]
+
+    path = imgurl[:imgurl.index("/")+1]
+    filename = imgurl[imgurl.index("/")+1:imgurl.index(".")]
+    appidx = imgurl[imgurl.index("."):]
+
+    imgs_dir = '/Users/doublez/Developer/Digital Media/TJ-Memory/src/main/resources/static/db/' + path
+    files = glob.glob(imgs_dir + filename + "-*" + appidx)   # list of matching file paths
+    files = sorted(files)
+
+    print(files)
+
+    imgs = [np.array(Image.open(files[i])) for i in range(len(files))]
+
+    factor = 0
+    shift = [imgs[0].shape[1] // (3 + factor)]*(len(imgs)-1)      # overlap range(hyper parameter)
+
+    best_img_index = getBestImgIndex(imgs)
+
+    imgs_corrected = colorCorrection(imgs, shift, best_img_index)
+
+    panorama = imgs_corrected[0]
+    for i in range(1, len(imgs_corrected)):
+        curr_img = imgs_corrected[i]
+        channel = np.argmax([np.var(curr_img[:,:,0]), np.var(curr_img[:,:,1]), np.var(curr_img[:,:,2])])       # get the channel with the largest mean variance
+
+        overlap = curr_img.shape[1] - shift[i-1]
+
+        error_surface = calcErrorSurface(panorama, curr_img, overlap, channel)
+
+        E = calcSeam(error_surface)
+
+        path = calcSeamPath(E, error_surface)
+
+        panorama = stitchImage(panorama, curr_img, path, overlap)
+
+    result = np.array(255*panorama/np.max(panorama)).astype('uint8')
+    plt.figure()
+    plt.imshow(result)
+    imageio.imwrite(imgs_dir+filename+appidx, np.array(255*panorama/np.max(panorama)).astype('uint8'))
+
+    for file in files:
+        os.remove(file)

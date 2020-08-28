@@ -19,7 +19,8 @@ public class PythonConnectorService {
     public void connect_to_python(String imgurl, int length) {
         Process proc;
         try {
-            String python_file_path = "src/main/resources/static/python/panorama.py";
+            String python_filename = "fast-panorama-stitching-mobile.py";
+            String python_file_path = "src/main/resources/static/python/" + python_filename;
 //            String python_file_path = "/root/Developer/Python/panorama.py";
 
             String[] cmdArr = new String[] {"python", python_file_path, imgurl, String.valueOf(length)};
