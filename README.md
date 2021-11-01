@@ -2,7 +2,7 @@
 
 <!-- 🌐 [济·忆 | TJ-Memory](http://tj-memory.doublez.site/) -->
 
-🎥 [网页视频 | Intro Video](https://b23.tv/gMvhLr)
+🎥 [介绍视频 | Intro Video](https://b23.tv/gMvhLr)
 
  📦[tj-memory-0.0.1-SNAPSHOT](https://github.com/doubleZ0108/TJ-Memory/releases/tag/v1.0)
 
